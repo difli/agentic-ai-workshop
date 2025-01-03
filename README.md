@@ -484,10 +484,6 @@ We now have two flows: the **RAG Flow** and the **Order/Product Lookup Flow**. L
 
 ---
 
-Here's the revised **Step 9** with the added instructions on retrieving credentials:
-
----
-
 ### Step 9: **Integrate with a Python Front End** 🖥️🐍
 
 In this step, we’ll create a user-friendly interface using a Streamlit-based Python application. This front end will connect to your Langflow-powered backend, allowing users to interact with your AI system effortlessly.
