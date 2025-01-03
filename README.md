@@ -59,7 +59,7 @@ By the end of this workshop, you’ll build a system capable of:
 
 Let’s dive in!
 
-![UI](assets/ui.png)
+<img src="assets/ui.png" alt="ui" width="800">
 
 ---
 
