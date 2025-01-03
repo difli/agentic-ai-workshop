@@ -566,7 +566,7 @@ Here’s the updated version of the last two sections with icons:
 ## Resources 📚🔗
 
 - 📖 **Langflow Documentation:** [Langflow Docs](https://docs.datastax.com/en/langflow/index.html)  
-- 🛠️ **Astra DB Tutorials:** [Astra DB Docs](https://docs.datastax.com/en/astra-db-serverless/index.html)  
+- 🛠️ **Astra DB Documentation:** [Astra DB Docs](https://docs.datastax.com/en/astra-db-serverless/index.html)  
 - 💾 **GitHub Repository:** [Workshop Content](https://github.com/difli/agentic-ai-workshop.git)
 
 ---
