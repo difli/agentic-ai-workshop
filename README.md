@@ -96,11 +96,13 @@ Let’s start by setting up a new flow in Langflow. This serves as the foundatio
    ![Langflow](assets/langflow-blank-flow.png)
 
 3. **Name Your Flow:** ✏️  
-   - Provide a meaningful name for your flow that reflects its purpose.  
-   - Define the API endpoint to make the flow accessible via external HTTP calls.  
    - Click **Flow Settings** to configure these details.
 
    ![Langflow](assets/langflow-flow-settings.png)  
+
+   - Provide a meaningful name for your flow that reflects its purpose.  
+   - Define the API endpoint to make the flow accessible via external HTTP calls.  
+
    ![Langflow](assets/langflow-flow-settings-1.png)
 
 > **🎉 Success!** Your flow is now set up and ready for development. Next, we’ll create a simple echo flow to see how components interact.  
