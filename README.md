@@ -25,7 +25,7 @@ Welcome to this transformative workshop! Today, we’ll explore how to build an 
 
 Get ready to build scalable, real-world AI applications that make a difference.
 
-![Demo Screenshot](assets/architecture.png)
+<img src="assets/architecture.png" alt="architecture" width="1200">
 
 ---
 
@@ -103,7 +103,7 @@ Let’s start by setting up a new flow in Langflow. This serves as the foundatio
    - Provide a meaningful name for your flow that reflects its purpose.  
    - Define the API endpoint to make the flow accessible via external HTTP calls.  
 
-   ![Langflow](assets/langflow-flow-settings-1.png)
+   <img src="assets/langflow-flow-settings-1.png" alt="langflow-flow-settings-1" width="800">
 
 > **🎉 Success!** Your flow is now set up and ready for development. Next, we’ll create a simple echo flow to see how components interact.  
 
@@ -158,7 +158,7 @@ To enable more advanced capabilities, we will extend the flow by integrating an 
    - Click the icon in the **OpenAI API Key** field of the agent.  
    - Add a new variable of type **Credential**, name it `OPENAI_API_KEY`, and select the variable.  
 
-   ![Langflow](assets/langflow-credential.png)
+   <img src="assets/langflow-credential.png" alt="langflow-credential" width="300">
 
 5. **Set Agent Instructions:** 📜  
    - Instructions provide the agent with guidance on what tasks to perform and how to interact with tools.  
