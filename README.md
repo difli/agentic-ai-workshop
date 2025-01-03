@@ -1,6 +1,6 @@
 # Mastering Agentic AI with Langflow and Astra DB 🚀
 
-<img src="assets/banner.JPG" alt="Workshop Banner" width="1200">
+<img src="assets/banner.JPG" alt="Workshop Banner" width="800">
 
 ---
 
@@ -573,6 +573,4 @@ Here’s the updated version of the last two sections with icons:
 
 ## Call to Action 🚀✨
 
-🎉 Congratulations! You’ve built a powerful AI system combining **RAG**, **multi-agent collaboration**, and **advanced database querying**. Expand this system for other use cases like **inventory management**, **internal knowledge retrieval**, or **personalized user experiences**.
-
-🤔 **What will you build next?** The tools are in your hands. Let’s create the future of AI together! 💡🌟
+🎉 Congratulations on building a cutting-edge AI system! Expand your skills further by exploring new use cases like inventory management, knowledge retrieval, or personalized recommendations. Let's innovate together! 🚀
