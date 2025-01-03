@@ -551,6 +551,8 @@ In this step, we’ll create a user-friendly interface using a Streamlit-based P
      - "How can I track my order?"
      - "What is your return policy?"
      - "Can I cancel order #1004?"
+   <img src="assets/ui.png" alt="ui" width="500">
+
 
 8. **Troubleshooting and Next Steps:** 🔍  
    - Ensure the virtual environment is activated before running the application.
