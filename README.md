@@ -1,6 +1,6 @@
 # Mastering Agentic AI with Langflow and Astra DB 🚀
 
-![Workshop Banner](assets/banner.jpg)
+<img src="assets/banner.JPG" alt="Workshop Banner" width="1200">
 
 ---
 
@@ -59,7 +59,7 @@ By the end of this workshop, you’ll build a system capable of:
 
 Let’s dive in!
 
-<img src="assets/ui.png" alt="ui" width="800">
+<img src="assets/ui.png" alt="ui" width="500">
 
 ---
 
@@ -87,23 +87,23 @@ Let’s start by setting up a new flow in Langflow. This serves as the foundatio
    - Open [Langflow](https://astra.datastax.com/langflow) and click the **New Flow** button on the dashboard.  
    - This will open the flow creation interface.  
 
-   ![Langflow](assets/langflow-new-flow.png)
+    <img src="assets/langflow-new-flow.png" alt="langflow-new-flow" width="800">
 
 2. **Choose a Blank Flow Template:** 📄  
    - Select the **Blank Flow** option from the available templates.  
    - Langflow offers a variety of templates for different AI workflows, which is continuously expanding.
 
-   ![Langflow](assets/langflow-blank-flow.png)
+   <img src="assets/langflow-blank-flow.png" alt="langflow-blank-flow" width="800">
 
 3. **Name Your Flow:** ✏️  
    - Click **Flow Settings** to configure these details.
 
-   ![Langflow](assets/langflow-flow-settings.png)  
+   <img src="assets/langflow-flow-settings.png" alt="langflow-flow-settings" width="800">
 
    - Provide a meaningful name for your flow that reflects its purpose.  
    - Define the API endpoint to make the flow accessible via external HTTP calls.  
 
-   <img src="assets/langflow-flow-settings-1.png" alt="langflow-flow-settings-1" width="800">
+   <img src="assets/langflow-flow-settings-1.png" alt="langflow-flow-settings-1" width="500">
 
 > **🎉 Success!** Your flow is now set up and ready for development. Next, we’ll create a simple echo flow to see how components interact.  
 
@@ -121,7 +121,7 @@ To understand the basics of Langflow, let’s create a simple flow where the inp
    - Link the `Chat Input` component to the `Chat Output` component.  
    - This creates a direct flow where user input is sent directly to the output.
 
-   ![Langflow](assets/langflow-echo-flow.png)
+   <img src="assets/langflow-echo-flow.png" alt="langflow-echo-flow" width="800">
 
 3. **Test in the Playground:** 🎮  
    - Click the **Playground** button to test the flow.  
@@ -131,7 +131,7 @@ To understand the basics of Langflow, let’s create a simple flow where the inp
      ```  
    - Observe how the input is echoed back in the output.
 
-   ![Langflow](assets/langflow-playground-echo.png)
+   <img src="assets/langflow-playground-echo.png" alt="langflow-playground-echo" width="500">
 
 > **🎉 Success!** You’ve created your first flow in Langflow. This simple echo flow demonstrates how components can interact. Next, let’s extend this flow by introducing an agent to handle more complex tasks.
 
@@ -151,7 +151,7 @@ To enable more advanced capabilities, we will extend the flow by integrating an 
    - Link the `Chat Input` component to the `Agent` component.  
    - Connect the `Agent` component to the `Chat Output` component.  
 
-   ![Langflow](assets/langflow-agentic-flow.png)
+   <img src="assets/langflow-agentic-flow.png" alt="langflow-agentic-flow" width="800">
 
 4. **Configure API Credentials:** 🔑  
    - The agent supports various LLM providers. For this workshop, we use OpenAI, which requires an API key.  
@@ -175,8 +175,7 @@ To enable more advanced capabilities, we will extend the flow by integrating an 
      ```  
    - Observe the agent's response and verify that it processes the input correctly.  
 
-   ![Langflow](assets/langflow-playground-bob-marley.png)
-
+   <img src="assets/langflow-playground-bob-marley.png" alt="langflow-playground-bob-marley" width="800">
 
 > **🎉 Success!** You’ve successfully integrated an agent into your flow. This marks a significant step toward creating a smart and interactive application. Next, let’s tailor the agent for our specific use case: the "Customer Support Agent."  
 
@@ -198,37 +197,37 @@ The agent we developed so far cannot answer questions specific to our context an
    - Link the `Retriever` output of the `Astra DB` component to the `Retriever` input of the `RetrieverTool` component.  
    - Connect the `Tools` output of the `RetrieverTool` component to the `Agent` component.
 
-   ![Langflow](assets/langflow-rag-flow.png)
+   <img src="assets/langflow-rag-flow.png" alt="langflow-rag-flow" width="1200">
 
 4. **Create a New Database in Astra DB:** 📋  
    - In the `Astra DB` component, click **Add New Database** to create a new database.  
  
-   ![Langflow](assets/langflow-create-database.png)  
+   <img src="assets/langflow-create-database.png" alt="langflow-create-database" width="800">
    
    - Fill in the required details and click **Create Database**.
 
-   ![Langflow](assets/langflow-create-database-1.png)
+   <img src="assets/langflow-create-database-1.png" alt="langflow-create-database-1" width="500">
 
    > **Note:** Database creation may take a few minutes.
 
 5. **Switch to Astra DB:** 🔄  
    - Open Astra DB and navigate to your newly created database.  
 
-   ![Langflow](assets/langflow-switch-to-astradb.png)
+   <img src="assets/langflow-switch-to-astradb.png" alt="langflow-switch-to-astradb" width="500">
 
 6. **Create an FAQ Collection:** 🗂️  
    - In Astra DB, go to **Data Explorer** and click **Create Collection**.  
 
-   ![AstraDB](assets/astradb-create-collection-vectorized.png)  
+   <img src="assets/astradb-create-collection-vectorized.png" alt="astradb-create-collection-vectorized" width="500">
 
    - Name the collection `faq`, enable the **Vector-Enabled Collection** option, and click **Create Collection**.  
 
-   ![AstraDB](assets/astradb-create-collection-vectorized-1.png)
+   <img src="assets/astradb-create-collection-vectorized-1.png" alt="astradb-create-collection-vectorized-1" width="500">
 
 7. **Switch Back to Langflow:** ↩️  
    - Return to Langflow to continue configuring the RAG flow.  
 
-   ![AstraDB](assets/astradb-switch-to-langflow.png)
+   <img src="assets/astradb-switch-to-langflow.png" alt="astradb-switch-to-langflow" width="800">
 
 8. **Configure the Astra DB Component:** ⚙️  
    - Fill in the following details in the `Astra DB` component:
@@ -237,7 +236,7 @@ The agent we developed so far cannot answer questions specific to our context an
      - **Embedding Provider:** `Nvidia`
      - **Model:** `NV-Embed-QA`
 
-   ![Langflow](assets/langflow-astradb-vector-component.png)
+   <img src="assets/langflow-astradb-vector-component.png" alt="langflow-astradb-vector-component" width="300">
 
 9. **Configure the RetrieverTool Component:** 🛠️  
    - Provide the `RetrieverTool` with:
@@ -265,7 +264,7 @@ The agent we developed so far cannot answer questions specific to our context an
       ```
     - Observe the response and confirm the agent uses the `RetrieverTool` effectively.
 
-    ![Langflow](assets/langflow-playground-faq-flow-not-working.png)
+    <img src="assets/langflow-playground-faq-flow-not-working.png" alt="langflow-playground-faq-flow-not-working" width="800">
 
 12. **Verify the Flow:** ✅  
     - **Test Point 1:** Observe that the agent is unable to respond meaningfully without context.
@@ -306,13 +305,13 @@ The agent cannot yet provide proper answers because it lacks the necessary infor
      3. **Embedding Provider:** `Nvidia`
      4. **Model:** `NV-Embed-QA`
 
-   ![Langflow](assets/langflow-astradb-vector-component.png)
+   <img src="assets/langflow-astradb-vector-component.png" alt="langflow-astradb-vector-component" width="300">
 
 7. **Execute the Flow:** ▶️
    - Click the play button on the `Astra DB` component to run the flow.
    - The PDF will be split into chunks, which will then flow into the `Astra DB` component for vectorization and storage alongside their corresponding vectors.
 
-   ![Langflow](assets/langflow-vectorization-flow.png)
+   <img src="assets/langflow-vectorization-flow.png" alt="langflow-vectorization-flow" width="800">
 
 8. **Test the RAG Flow in the Playground:** 🎮
    - Open the **Playground** and query the system with:
@@ -321,7 +320,7 @@ The agent cannot yet provide proper answers because it lacks the necessary infor
      ```
    - Confirm that the system retrieves accurate responses based on the newly vectorized FAQ data.
 
-   ![Langflow](assets/langflow-playground-faq-flow-working.png)
+   <img src="assets/langflow-playground-faq-flow-working.png" alt="langflow-playground-faq-flow-working" width="800">
 
 9. **Verify Vectorization:** ✅
 - **Test Point 1:** Ensure that the `faq` collection in Astra DB contains the vectorized data by querying it directly in Astra DB.
@@ -340,7 +339,7 @@ To create a comprehensive customer support system, the agent must retrieve order
 1. **Switch to Astra DB:** 🔄
    - From Langflow, navigate to Astra DB by clicking on the appropriate link or switching tabs.
    
-   ![Langflow](assets/langflow-switch-to-astradb.png)
+   <img src="assets/langflow-switch-to-astradb.png" alt="langflow-switch-to-astradb" width="500">
 
 2. **Create the `Orders` Collection:** 📝
    - In Astra DB, click on your `customer-support` database and then open the **Data Explorer**.
@@ -349,7 +348,7 @@ To create a comprehensive customer support system, the agent must retrieve order
      - Disable the **Vector-enabled collection** switch.
      - Click **Create Collection**.
 
-   ![AstraDB](assets/astradb-create-collection-not-vector-enabled.png)
+   <img src="assets/astradb-create-collection-not-vector-enabled.png" alt="astradb-create-collection-not-vector-enabled" width="800">
 
 3. **Create the `Products` Collection:** 🛒
    - Follow the same steps as above to create a second collection:
@@ -361,11 +360,11 @@ To create a comprehensive customer support system, the agent must retrieve order
    - Select the `orders` collection in the **Data Explorer**.
    - Click on **Load Data** to begin importing sample data.
    
-   ![AstraDB](assets/astradb-load-data.png)
+   <img src="assets/astradb-load-data.png" alt="astradb-load-data" width="800">
 
    - Upload the file: [sample_orders.csv](./sample_orders.csv).
 
-   ![AstraDB](assets/astradb-load-data-1.png)
+   <img src="assets/astradb-load-data-1.png" alt="astradb-load-data-1" width="800">
 
 5. **Load Data into the `Products` Collection:** 📦
    - Select the `products` collection in the **Data Explorer**.
@@ -374,14 +373,14 @@ To create a comprehensive customer support system, the agent must retrieve order
 6. **Verify Data Uploads:** ✅
 - **Test Point 1:** Ensure that the `orders` collection contains the expected data by querying it in Astra DB.
 - **Test Point 2:** Verify that the `products` collection also reflects the uploaded sample data.
-  ![AstraDB](assets/astradb-data-loaded.png)
+  <img src="assets/astradb-data-loaded.png" alt="astradb-data-loaded" width="800">
 
   > **🎉 Success!** Your sample data is now loaded into Astra DB, making it ready for integration with your `OrderLookupAgent` and other flows.
   
 7. **Return to Langflow:** 🔙
    - After uploading data, switch back to Langflow to continue working on your flows.
 
-   ![Langflow](assets/astradb-switch-to-langflow.png)
+   <img src="assets/astradb-switch-to-langflow.png" alt="astradb-switch-to-langflow" width="800">
 
 ---
 
@@ -426,7 +425,7 @@ To create a comprehensive customer support system, the agent must retrieve order
    - Enable **Tool Mode** and provide meaningful labels:
      - Rename the component to `OrderLookupAgent`.
 
-   ![Langflow](assets/langflow-agent-tool-mode.png)
+   <img src="assets/langflow-agent-tool-mode.png" alt="langflow-agent-tool-mode" width="300">
 
 3. **Connect Components:** 🔗
    - Connect the `Data` endpoints of both `Astra DB` components to the `Tools` endpoint of the `OrderLookupAgent`.
@@ -434,7 +433,7 @@ To create a comprehensive customer support system, the agent must retrieve order
 4. **Validate the Flow:** ✅
    - Click the **Play** button on the `OrderLookupAgent` to ensure the flow is configured correctly.
 
-   ![Langflow](assets/langflow-agent-check-flow.png)
+   <img src="assets/langflow-agent-check-flow.png" alt="langflow-agent-check-flow" width="800">
 
 > **🎉 Congratulations!** You’ve successfully created an `OrderLookupAgent` that integrates seamlessly with your Astra DB collections. This agent can now retrieve and aggregate order and product data, a critical component for your customer support system!
 
@@ -467,7 +466,7 @@ We now have two flows: the **RAG Flow** and the **Order/Product Lookup Flow**. L
 3. **Connect the Tools to ManagementAgent:** 🔗
    - Link the `OrderLookupAgent` component’s `Toolset` endpoint to the `ManagementAgent` component’s `Tools` endpoint.
 
-     ![Langflow](assets/langflow-complete-flow.png)
+     <img src="assets/langflow-complete-flow.png" alt="langflow-complete-flow" width="1200">
 
 4. **Test ManagementAgent in the Playground:** 🎮
    - Click the **Playground** button and enter the following query:
@@ -476,7 +475,7 @@ We now have two flows: the **RAG Flow** and the **Order/Product Lookup Flow**. L
      ```
      Confirm that the response combines relevant data from the `Orders` and `Products` collections.
 
-     ![Langflow](assets/langflow-check-flow.png)
+     <img src="assets/langflow-check-flow.png" alt="langflow-check-flow" width="600">
 
 5. **Conduct Comprehensive Testing:** ✅
    - **Test Point 1:** Check that responses accurately reflect the data in the `Orders` and `Products` collections. 📋
@@ -533,12 +532,12 @@ In this step, we’ll create a user-friendly interface using a Streamlit-based P
    - Log in to your Langflow dashboard.
    - Click the **API** button to access API credentials.  
 
-     ![Langflow](assets/langflow-api-button.png)
+     <img src="assets/langflow-api-button.png" alt="langflow-api-button" width="1200">
 
    - Click the **Generate Token** button to create an application token. Copy and paste it into your `secrets.toml`.  
    - Copy your `Langflow ID` from the provided curl command and add it to your `secrets.toml`.  
 
-     ![Langflow](assets/langflow-token-and-id.png)
+     <img src="assets/langflow-token-and-id.png" alt="langflow-token-and-id" width="800">
 
 6. **Run the Application:** ▶️  
    - Start the Streamlit server:
