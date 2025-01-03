@@ -559,8 +559,6 @@ In this step, we’ll create a user-friendly interface using a Streamlit-based P
 
 > **🎉 Success!** Your Streamlit front end is up and running, offering an intuitive and professional way for users to interact with your AI-powered customer support system.
 
-Here’s the updated version of the last two sections with icons:
-
 ---
 
 ## Resources 📚🔗
