@@ -79,105 +79,137 @@ Additionally, create free accounts for:
 
 We’ll begin by implementing a multi-agent-based flow for our frontend application. This flow will be the backbone for delivering accurate and dynamic responses to customer inquiries.
 
+---
+
 ### Step 1: **Set Up Our Flow** 🛠️🌟
 
-Let’s start by setting up a new flow in Langflow. This serves as the foundation for our project.
+Start by setting up a new flow in Langflow, the foundation for your project.
 
-1. **Create a New Flow:** ➕  
-   - Open [Langflow](https://astra.datastax.com/langflow) and click the **New Flow** button on the dashboard.  
-   - This will open the flow creation interface.  
+---
 
-    <img src="assets/langflow-new-flow.png" alt="langflow-new-flow" width="800">
+#### **Create a New Flow** ➕  
+- Open [Langflow](https://astra.datastax.com/langflow) and click **New Flow** on the dashboard.  
+- This will open the flow creation interface.  
 
-2. **Choose a Blank Flow Template:** 📄  
-   - Select the **Blank Flow** option from the available templates.  
-   - Langflow offers a variety of templates for different AI workflows, which is continuously expanding.
+   <img src="assets/langflow-new-flow.png" alt="langflow-new-flow" width="800">
+
+---
+
+#### **Choose a Blank Flow Template** 📄  
+- Select the **Blank Flow** option from the available templates.  
+- Langflow offers a variety of templates for different AI workflows, which are continuously expanding.
 
    <img src="assets/langflow-blank-flow.png" alt="langflow-blank-flow" width="800">
 
-3. **Name Your Flow:** ✏️  
-   - Click **Flow Settings** to configure these details.
+---
+
+#### **Name Your Flow** ✏️  
+- Click **Flow Settings** to configure the flow details.  
 
    <img src="assets/langflow-flow-settings.png" alt="langflow-flow-settings" width="800">
 
-   - Provide a meaningful name for your flow that reflects its purpose.  
-   - Define the API endpoint to make the flow accessible via external HTTP calls.  
+- Provide a meaningful name that reflects the flow's purpose.  
+- Define the API endpoint to make the flow accessible via external HTTP calls.  
 
    <img src="assets/langflow-flow-settings-1.png" alt="langflow-flow-settings-1" width="500">
 
-> **🎉 Success!** Your flow is now set up and ready for development. Next, we’ll create a simple echo flow to see how components interact.  
+---
+
+> **🎉 Success!** Your flow is now set up and ready for development. Next, create a simple echo flow to see how components interact.  
 
 --- 
 
 ### Step 2: **Create a Simple Echo Flow** 🔁💬
 
-To understand the basics of Langflow, let’s create a simple flow where the input is echoed back to the user. This will help us get familiar with the interface and how components interact.
+Learn the basics of Langflow by creating a simple flow where the input is echoed back to the user. This exercise introduces the interface and demonstrates how components interact.
 
-1. **Add Components:** 🧩  
-   - Drag `Chat Input` and `Chat Output` components from the left-hand panel onto the canvas.  
-   - These components represent the user input and the system response, respectively.
+---
 
-2. **Connect the Components:** 🔗  
-   - Link the `Chat Input` component to the `Chat Output` component.  
-   - This creates a direct flow where user input is sent directly to the output.
+#### **Add Components** 🧩  
+- Drag `Chat Input` and `Chat Output` components from the left-hand panel onto the canvas.  
+- These components represent the user input and the system response.
+
+---
+
+#### **Connect the Components** 🔗  
+- Link the `Chat Input` component to the `Chat Output` component.  
+- This creates a direct flow, sending user input directly to the output.
 
    <img src="assets/langflow-echo-flow.png" alt="langflow-echo-flow" width="800">
 
-3. **Test in the Playground:** 🎮  
-   - Click the **Playground** button to test the flow.  
-   - In the Playground, type:  
-     ```
-     hello
-     ```  
-   - Observe how the input is echoed back in the output.
+---
+
+#### **Test in the Playground** 🎮  
+- Click the **Playground** button to test the flow.  
+- In the Playground, type:
+   ```
+   hello
+   ```  
+- Observe how the input is echoed back in the output.
 
    <img src="assets/langflow-playground-echo.png" alt="langflow-playground-echo" width="500">
 
-> **🎉 Success!** You’ve created your first flow in Langflow. This simple echo flow demonstrates how components can interact. Next, let’s extend this flow by introducing an agent to handle more complex tasks.
+---
+
+> **🎉 Success!** You’ve created your first flow in Langflow. This simple echo flow demonstrates how components interact. Next, extend this flow by introducing an agent to handle more complex tasks.  
 
 ---
 
 ### Step 3: **Extend the Flow with an Agent** 🤖💡
 
-To enable more advanced capabilities, we will extend the flow by integrating an agent. This agent will serve as the brain behind our application, processing inputs and interacting with tools.
+Extend your flow by integrating an agent to enable advanced capabilities. The agent will act as the brain behind your application, processing inputs and interacting with tools.
 
-1. **Remove Existing Connections:** ✂️  
-   - Disconnect the `Chat Input` and `Chat Output` components.
+---
 
-2. **Add an Agent Component:** 🧩  
-   - Drag and drop the `Agent` component onto the canvas.  
+#### **Remove Existing Connections** ✂️  
+- Disconnect the `Chat Input` and `Chat Output` components.
 
-3. **Connect the Components:** 🔗  
-   - Link the `Chat Input` component to the `Agent` component.  
-   - Connect the `Agent` component to the `Chat Output` component.  
+---
+
+#### **Add an Agent Component** 🧩  
+- Drag and drop the `Agent` component onto the canvas.
+
+---
+
+#### **Connect the Components** 🔗  
+- Link the `Chat Input` component to the `Agent` component.  
+- Connect the `Agent` component to the `Chat Output` component.
 
    <img src="assets/langflow-agentic-flow.png" alt="langflow-agentic-flow" width="800">
 
-4. **Configure API Credentials:** 🔑  
-   - The agent supports various LLM providers. For this workshop, we use OpenAI, which requires an API key.  
-   - Click the icon in the **OpenAI API Key** field of the agent.  
-   - Add a new variable of type **Credential**, name it `OPENAI_API_KEY`, and select the variable.  
+---
+
+#### **Configure API Credentials** 🔑  
+- The agent supports various LLM providers. For this workshop, we use OpenAI, which requires an API key.  
+- Click the icon in the **OpenAI API Key** field of the agent.  
+- Add a new variable of type **Credential**, name it `OPENAI_API_KEY`, and select the variable.
 
    <img src="assets/langflow-credential.png" alt="langflow-credential" width="300">
 
-5. **Set Agent Instructions:** 📜  
-   - Instructions provide the agent with guidance on what tasks to perform and how to interact with tools.  
-   - Click the icon in the **Agent Instructions** field to view the default instruction:  
-     ```
-     You are a helpful assistant that can use tools to answer questions and perform tasks.
-     ```  
-   - For now, we will leave this default instruction unchanged.
+---
 
-6. **Test the Flow in the Playground:** 🎮  
-   - Open the **Playground**, enter a query like:  
-     ```
-     Who is Bob Marley?
-     ```  
-   - Observe the agent's response and verify that it processes the input correctly.  
+#### **Set Agent Instructions** 📜  
+- Instructions guide the agent on what tasks to perform and how to interact with tools.  
+- Click the icon in the **Agent Instructions** field to view the default instruction:
+   ```
+   You are a helpful assistant that can use tools to answer questions and perform tasks.
+   ```
+- For now, leave the default instruction unchanged.
+
+---
+
+#### **Test the Flow in the Playground** 🎮  
+- Open the **Playground** and test the agent by entering a query like:
+   ```
+   Who is Bob Marley?
+   ```
+- Observe the agent's response and verify that it processes the input correctly.
 
    <img src="assets/langflow-playground-bob-marley.png" alt="langflow-playground-bob-marley" width="800">
 
-> **🎉 Success!** You’ve successfully integrated an agent into your flow. This marks a significant step toward creating a smart and interactive application. Next, let’s tailor the agent for our specific use case: the "Customer Support Agent."  
+---
+
+> **🎉 Success!** You’ve successfully integrated an agent into your flow. This is a key step toward creating a smart and interactive application. Next, we’ll tailor the agent for our specific use case: the "Customer Support Agent."  
 
 ---
 
@@ -185,89 +217,115 @@ To enable more advanced capabilities, we will extend the flow by integrating an 
 
 The agent we developed so far cannot answer questions specific to our context and may hallucinate, producing irrelevant or incorrect responses. To address this, we’ll implement a Retrieval-Augmented Generation (RAG) flow. This approach allows the agent to retrieve relevant data from the company’s FAQ database for accurate responses.
 
-1. **Add an Astra DB Component:** 🗄️  
-   - Drag an `Astra DB` component onto the canvas from the **Vector Stores** section.  
-   - This component will store and retrieve vectorized FAQ data.
+---
 
-2. **Add a Retriever Tool:** 🛠️  
-   - Drag a `RetrieverTool` component onto the canvas from the **Tools** section.  
-   - This tool will enable the agent to search the FAQ database for relevant information.
+#### **Add an Astra DB Component** 🗄️  
+- Drag an `Astra DB` component onto the canvas from the **Vector Stores** section.  
+- Use this component to store and retrieve vectorized FAQ data.
 
-3. **Connect the Components:** 🔗  
-   - Link the `Retriever` output of the `Astra DB` component to the `Retriever` input of the `RetrieverTool` component.  
-   - Connect the `Tools` output of the `RetrieverTool` component to the `Agent` component.
+---
+
+#### **Add a Retriever Tool** 🛠️  
+- Drag a `RetrieverTool` component onto the canvas from the **Tools** section.  
+- This tool enables the agent to search the FAQ database for relevant information.
+
+---
+
+#### **Connect the Components** 🔗  
+- Link the `Retriever` output of the `Astra DB` component to the `Retriever` input of the `RetrieverTool`.  
+- Connect the `Tools` output of the `RetrieverTool` component to the `Agent` component.
 
    <img src="assets/langflow-rag-flow.png" alt="langflow-rag-flow" width="1200">
 
-4. **Create a New Database in Astra DB:** 📋  
-   - In the `Astra DB` component, click **Add New Database** to create a new database.  
- 
+---
+
+#### **Create a New Database in Astra DB** 📋  
+- In the `Astra DB` component, click **Add New Database** to create a new database.
+
    <img src="assets/langflow-create-database.png" alt="langflow-create-database" width="800">
-   
-   - Fill in the required details and click **Create Database**.
+
+- Fill in the required details and click **Create Database**.
 
    <img src="assets/langflow-create-database-1.png" alt="langflow-create-database-1" width="500">
 
-   > **Note:** Database creation may take a few minutes.
+> **Note:** Database creation may take a few minutes.
 
-5. **Switch to Astra DB:** 🔄  
-   - Open Astra DB and navigate to your newly created database.  
+---
+
+#### **Switch to Astra DB** 🔄  
+- Open Astra DB and navigate to your newly created database.
 
    <img src="assets/langflow-switch-to-astradb.png" alt="langflow-switch-to-astradb" width="500">
 
-6. **Create an FAQ Collection:** 🗂️  
-   - In Astra DB, go to **Data Explorer** and click **Create Collection**.  
+---
+
+#### **Create an FAQ Collection** 🗂️  
+- In Astra DB, go to **Data Explorer** and click **Create Collection**.
 
    <img src="assets/astradb-create-collection-vectorized.png" alt="astradb-create-collection-vectorized" width="500">
 
-   - Name the collection `faq`, enable the **Vector-Enabled Collection** option, and click **Create Collection**.  
+- Name the collection `faq`, enable the **Vector-Enabled Collection** option, and click **Create Collection**.
 
    <img src="assets/astradb-create-collection-vectorized-1.png" alt="astradb-create-collection-vectorized-1" width="500">
 
-7. **Switch Back to Langflow:** ↩️  
-   - Return to Langflow to continue configuring the RAG flow.  
+---
+
+#### **Switch Back to Langflow** ↩️  
+- Return to Langflow to continue configuring the RAG flow.
 
    <img src="assets/astradb-switch-to-langflow.png" alt="astradb-switch-to-langflow" width="800">
 
-8. **Configure the Astra DB Component:** ⚙️  
-   - Fill in the following details in the `Astra DB` component:
-     - **Collection Name:** `faq`
-     - **Embedding Model or Astra Vectorize:** `Astra Vectorize`
-     - **Embedding Provider:** `Nvidia`
-     - **Model:** `NV-Embed-QA`
+---
+
+#### **Configure the Astra DB Component** ⚙️  
+- Fill in the following details in the `Astra DB` component:
+   - **Collection Name:** `faq`
+   - **Embedding Model or Astra Vectorize:** `Astra Vectorize`
+   - **Embedding Provider:** `Nvidia`
+   - **Model:** `NV-Embed-QA`
 
    <img src="assets/langflow-astradb-vector-component.png" alt="langflow-astradb-vector-component" width="300">
 
-9. **Configure the RetrieverTool Component:** 🛠️  
-   - Provide the `RetrieverTool` with:
-     - **Name:** `FAQ`
-     - **Description:**  
-       ```text
-       Answer frequently asked questions (FAQs) about shipping, returns, placing orders, and more.
-       ```
+---
 
-10. **Define Agent Instructions:** ✍️  
-    - Add the following instructions to the **Agent Instructions** field:
-      ```text
-      Your primary responsibility is to use the available tools to accurately address user inquiries and provide detailed, helpful responses. You can:
+#### **Configure the Retriever Tool** 🛠️  
+- Provide the `RetrieverTool` with:
+   - **Name:** `FAQ`
+   - **Description:**  
+     ```text
+     Answer frequently asked questions (FAQs) about shipping, returns, placing orders, and more.
+     ```
 
-      - Answer frequently asked questions (FAQs) about shipping, returns, placing orders, and more.
+---
 
-      Example: If the ask is about delivery times, check the FAQ.
-      Always aim to deliver clear, concise, and user-focused solutions to ensure the best possible experience.
-      ```
+#### **Define Agent Instructions** ✍️  
+- Add the following instructions to the **Agent Instructions** field:
+   ```text
+   Your primary responsibility is to use the available tools to accurately address user inquiries and provide detailed, helpful responses. You can:
 
-11. **Test the RAG Flow:** 🎮  
-    - Open the **Playground** and test the flow with a query like:
-      ```
-      What are the shipping times?
-      ```
-    - Observe the response and confirm the agent uses the `RetrieverTool` effectively.
+   - Answer frequently asked questions (FAQs) about shipping, returns, placing orders, and more.
 
-    <img src="assets/langflow-playground-faq-flow-not-working.png" alt="langflow-playground-faq-flow-not-working" width="800">
+   Example: If the ask is about delivery times, check the FAQ.
+   Always aim to deliver clear, concise, and user-focused solutions to ensure the best possible experience.
+   ```
 
-12. **Verify the Flow:** ✅  
-    - **Test Point 1:** Observe that the agent is unable to respond meaningfully without context.
+---
+
+#### **Test the RAG Flow** 🎮  
+- Open the **Playground** and test the flow with a query like:
+   ```
+   What are the shipping times?
+   ```
+- Observe the response to confirm the agent is unable to respond meaningfully.
+
+   <img src="assets/langflow-playground-faq-flow-not-working.png" alt="langflow-playground-faq-flow-not-working" width="800">
+
+---
+
+#### **Verify the Flow** ✅  
+- **Test Point 1:** Observe that the agent is unable to respond meaningfully without context.
+
+---
 
 > **🎉 Success!** Your agent now includes a RAG flow to answer context-specific queries accurately. The foundation is laid—next, we’ll enrich the agent with the required FAQ data. Say goodbye to hallucinations and hello to reliable responses!  
 
@@ -279,287 +337,430 @@ The agent cannot yet provide proper answers because it lacks the necessary infor
 
 ---
 
-1. **Add a File Component:** 📂
-   - Drag a `File` component onto the canvas from the **Data** section.
-   - This will allow you to upload the `Company_FAQ.pdf`.
+#### **Add Components to the Canvas** 🧩  
+1. **File Component:**  
+   - Drag a `File` component from the **Data** section.  
+   - This will allow you to upload the `Company_FAQ.pdf`.  
 
-2. **Add a Split Text Component:** ✂️
-   - Drag a `Split Text` component onto the canvas from the **Processing** section.
-   - This will break the FAQ document into manageable chunks for vectorization.
+2. **Split Text Component:**  
+   - Drag a `Split Text` component from the **Processing** section.  
+   - This will divide the FAQ into manageable chunks for vectorization.  
 
-3. **Add an Astra DB Component:** 🗄️
-   - Drag an "Astra DB" component onto the canvas from the **Vector Stores** section.
-   - This will serve as the storage for the vectorized data.
+3. **Astra DB Component:**  
+   - Drag an `Astra DB` component from the **Vector Stores** section.  
+   - This will store the vectorized data.  
 
-4. **Connect the Components:** 🔗
-   - Link the `Data` endpoint of the `File` component to the `Data Inputs` endpoint of the `Split Text` component.
-   - Link the `Chunks` endpoint of the `Split Text` component to the `Ingest Data` endpoint of the `Astra DB` component.
+---
 
-5. **Upload the FAQ Document:** 📥
-   - Upload the `Company_FAQ.pdf` file via the `File` component.
+#### **Connect the Components** 🔗  
+- Link the **File** component’s `Data` endpoint to the `Split Text` component’s `Data Inputs` endpoint.  
+- Connect the `Chunks` output of the **Split Text** component to the `Ingest Data` endpoint of the **Astra DB** component.  
 
-6. **Configure the Astra DB Component:** 🛠️
-   - Fill in the details of the `Astra DB` component:
-     1. **Collection Name:** `faq`
-     2. **Embedding Model or Astra Vectorize:** `Astra Vectorize`
-     3. **Embedding Provider:** `Nvidia`
-     4. **Model:** `NV-Embed-QA`
+---
+
+#### **Upload the FAQ Document** 📥  
+- Upload the `Company_FAQ.pdf` file via the **File** component.  
+
+---
+
+#### **Configure the Astra DB Component** ⚙️  
+- Fill in the following details:  
+  - **Collection Name:** `faq`  
+  - **Embedding Model or Astra Vectorize:** `Astra Vectorize`  
+  - **Embedding Provider:** `Nvidia`  
+  - **Model:** `NV-Embed-QA`  
 
    <img src="assets/langflow-astradb-vector-component.png" alt="langflow-astradb-vector-component" width="300">
 
-7. **Execute the Flow:** ▶️
-   - Click the play button on the `Astra DB` component to run the flow.
-   - The PDF will be split into chunks, which will then flow into the `Astra DB` component for vectorization and storage alongside their corresponding vectors.
+---
+
+#### **Run the Vectorization Flow** ▶️  
+- Click the play button on the **Astra DB** component to execute the flow.  
+- The PDF will be split into chunks, vectorized, and stored in Astra DB alongside their corresponding vectors.  
 
    <img src="assets/langflow-vectorization-flow.png" alt="langflow-vectorization-flow" width="800">
 
-8. **Test the RAG Flow in the Playground:** 🎮
-   - Open the **Playground** and query the system with:
-     ```
-     What are the shipping times?
-     ```
-   - Confirm that the system retrieves accurate responses based on the newly vectorized FAQ data.
+---
+
+#### **Test in the Playground** 🎮  
+- Open the **Playground** and query the system with:  
+   ```
+   What are the shipping times?
+   ```  
+- Confirm that the system retrieves accurate responses based on the newly vectorized FAQ data.  
 
    <img src="assets/langflow-playground-faq-flow-working.png" alt="langflow-playground-faq-flow-working" width="800">
 
-9. **Verify Vectorization:** ✅
-- **Test Point 1:** Ensure that the `faq` collection in Astra DB contains the vectorized data by querying it directly in Astra DB.
-- **Test Point 2:** Use queries like "What are the shipping times?" in the Langflow Playground to validate that the agent can now provide accurate responses based on the FAQ.
+---
 
-> **🎉 Success!** The FAQ has been successfully vectorized and integrated into the system. Your agent is now equipped to handle context-specific queries with precision!
+#### **Verify Vectorization** ✅  
+- **Test Point 1:** Ensure the `faq` collection in Astra DB contains the vectorized data by querying it directly in Astra DB.  
+- **Test Point 2:** Use queries like "What are the shipping times?" in the Langflow Playground to confirm the agent retrieves accurate information from the FAQ.  
+
+---
+
+> **🎉 Success!** Your FAQ has been successfully vectorized and integrated. The agent is now equipped to handle context-specific queries with precision.
 
 ---
 
 ### Step 6: **Upload Sample Data** 📦💾
 
-To create a comprehensive customer support system, the agent must retrieve order details from the database. Let’s upload some sample data into Astra DB to enable this functionality.
+Enable your customer support system to retrieve order and product details by uploading sample data to Astra DB.
 
 ---
 
-1. **Switch to Astra DB:** 🔄
-   - From Langflow, navigate to Astra DB by clicking on the appropriate link or switching tabs.
-   
+#### **Switch to Astra DB** 🔄  
+- Navigate from Langflow to Astra DB.
+
    <img src="assets/langflow-switch-to-astradb.png" alt="langflow-switch-to-astradb" width="500">
 
-2. **Create the `Orders` Collection:** 📝
-   - In Astra DB, click on your `customer-support` database and then open the **Data Explorer**.
-   - Click on **Create Collection** to start setting up a new collection.
-     - Collection Name: `orders`
-     - Disable the **Vector-enabled collection** switch.
-     - Click **Create Collection**.
+---
+
+#### **Create the `Orders` Collection** 📝  
+- In Astra DB, open your `customer-support` database and go to the **Data Explorer**.  
+- Click **Create Collection** and configure:
+  - **Collection Name:** `orders`  
+  - Disable the **Vector-enabled collection** switch.  
+  - Click **Create Collection**.  
 
    <img src="assets/astradb-create-collection-not-vector-enabled.png" alt="astradb-create-collection-not-vector-enabled" width="800">
 
-3. **Create the `Products` Collection:** 🛒
-   - Follow the same steps as above to create a second collection:
-     - Collection Name: `products`
-     - Disable the **Vector-enabled collection** switch.
-     - Click **Create Collection**.
+---
 
-4. **Load Data into the `Orders` Collection:** 📥
-   - Select the `orders` collection in the **Data Explorer**.
-   - Click on **Load Data** to begin importing sample data.
-   
+#### **Create the `Products` Collection** 🛒  
+- Repeat the steps above to create another collection:  
+  - **Collection Name:** `products`  
+  - Disable the **Vector-enabled collection** switch.  
+  - Click **Create Collection**.  
+
+---
+
+#### **Load Data into the Collections** 📥  
+1. **Orders Collection:**  
+   - Select the `orders` collection in the **Data Explorer**.  
+   - Click **Load Data** and upload the file: [sample_orders.csv](./sample_orders.csv).  
+
    <img src="assets/astradb-load-data.png" alt="astradb-load-data" width="800">
-
-   - Upload the file: [sample_orders.csv](./sample_orders.csv).
-
    <img src="assets/astradb-load-data-1.png" alt="astradb-load-data-1" width="800">
 
-5. **Load Data into the `Products` Collection:** 📦
-   - Select the `products` collection in the **Data Explorer**.
-   - Click on **Load Data** and upload the file: [sample_products.csv](./sample_products.csv).
+2. **Products Collection:**  
+   - Select the `products` collection in the **Data Explorer**.  
+   - Click **Load Data** and upload the file: [sample_products.csv](./sample_products.csv).  
 
-6. **Verify Data Uploads:** ✅
-- **Test Point 1:** Ensure that the `orders` collection contains the expected data by querying it in Astra DB.
-- **Test Point 2:** Verify that the `products` collection also reflects the uploaded sample data.
-  <img src="assets/astradb-data-loaded.png" alt="astradb-data-loaded" width="800">
+---
 
-  > **🎉 Success!** Your sample data is now loaded into Astra DB, making it ready for integration with your `OrderLookupAgent` and other flows.
-  
-7. **Return to Langflow:** 🔙
-   - After uploading data, switch back to Langflow to continue working on your flows.
+#### **Verify Data Uploads** ✅  
+- **Test Point 1:** Query the `orders` collection in Astra DB to ensure the data was uploaded correctly.  
+- **Test Point 2:** Verify the `products` collection reflects the sample data.  
+
+   <img src="assets/astradb-data-loaded.png" alt="astradb-data-loaded" width="800">
+
+---
+
+#### **Return to Langflow** 🔙  
+- After completing the data uploads, switch back to Langflow to continue building your flows.  
 
    <img src="assets/astradb-switch-to-langflow.png" alt="astradb-switch-to-langflow" width="800">
 
 ---
 
+> **🎉 Success!** Your sample data is now loaded into Astra DB, ready for integration with the `OrderLookupAgent` and other flows.
+---
+
 ### Step 7: **Build the Order Lookup Agent Flow** 🛠️🔍
 
-To create a comprehensive customer support system, the agent must retrieve order details from the database. Let’s implement the **Order Lookup Agent Flow** and the tools it will use to provide this functionality.
+Create a flow that retrieves order details and related product information from the database, enabling your customer support system to address queries effectively.
 
 ---
 
-1. **Add Astra DB Components:** 📦
-   - Drag and drop an **Astra DB** component onto the canvas for the `orders` collection:
-     - Tool Name: `OrderLookup`
-     - Database Name: `customer-support`
-     - Collection Name: `orders`
-     - Tool Description: `A tool used to look up an order based on its ID.`
-     - Tool Params: `!orderNumber`
+#### **Add Astra DB Components** 📦  
+- Drag and drop an **Astra DB** component for the `orders` collection:
+  - **Tool Name:** `OrderLookup`  
+  - **Database Name:** `customer-support`  
+  - **Collection Name:** `orders`  
+  - **Tool Description:** `A tool used to look up an order based on its ID.`  
+  - **Tool Params:** `!orderNumber`  
 
-   - Drag and drop another **Astra DB** component onto the canvas for the `products` collection:
-     - Tool Name: `ProductLookup`
-     - Database Name: `customer-support`
-     - Collection Name: `products`
-     - Tool Description: `A tool used to look up a product based on its ID.`
-     - Tool Params: `!productId`
+- Drag and drop another **Astra DB** component for the `products` collection:
+  - **Tool Name:** `ProductLookup`  
+  - **Database Name:** `customer-support`  
+  - **Collection Name:** `products`  
+  - **Tool Description:** `A tool used to look up a product based on its ID.`  
+  - **Tool Params:** `!productId`  
 
-2. **Add an Agent Component:** 🤖
-   - Drag and drop an **Agent** component onto the canvas to serve as the logic handler for order lookups.
-   - Configure the agent with:
-     - **OpenAI API Key**: Add your API key.
-     - **Agent Instructions**: Provide the following instructions:
-       ```text
-       You are an expert in analyzing customer orders and providing detailed and accurate information. Your primary role is to utilize the provided tools to efficiently look up order numbers, retrieve relevant details about the orders, and address any questions or concerns the user may have. Always aim to deliver clear, concise, and helpful responses, ensuring the user's needs are fully met.
+---
 
-       Lookup order numbers and product IDs using the tools provided.
+#### **Add an Agent Component** 🤖  
+- Drag and drop an **Agent** component to act as the logic handler.  
+- Configure the agent:
+  - **OpenAI API Key:** Add your key.  
+  - **Agent Instructions:**  
+    ```text
+    You are an expert in analyzing customer orders and providing detailed and accurate information. Your primary role is to utilize the provided tools to efficiently look up order numbers, retrieve relevant details about the orders, and address any questions or concerns the user may have.
 
-       Orders always contain an array of product IDs. Use these IDs to look up the specific products from the product lookup tool and aggregate the product information with the order to provide a clear summary of the order.
+    Lookup order numbers and product IDs using the tools provided.
 
-       If the order does not exist, simply tell the user to try again as the ID wasn't found.
+    Orders always contain an array of product IDs. Use these IDs to look up the specific products from the product lookup tool and aggregate the product information with the order to provide a clear summary of the order.
 
-       Only return information about orders; do not return anything else.
-       ```
+    If the order does not exist, simply tell the user to try again as the ID wasn't found.
 
-   - Enable **Tool Mode** and provide meaningful labels:
-     - Rename the component to `OrderLookupAgent`.
+    Only return information about orders; do not return anything else.
+    ```  
+  - Enable **Tool Mode** and rename the agent to `OrderLookupAgent`.  
 
-   <img src="assets/langflow-agent-tool-mode.png" alt="langflow-agent-tool-mode" width="300">
+   <img src="assets/langflow-agent-tool-mode.png" alt="langflow-agent-tool-mode" width="500">
 
-3. **Connect Components:** 🔗
-   - Connect the `Data` endpoints of both `Astra DB` components to the `Tools` endpoint of the `OrderLookupAgent`.
+---
 
-4. **Validate the Flow:** ✅
-   - Click the **Play** button on the `OrderLookupAgent` to ensure the flow is configured correctly.
+#### **Connect Components** 🔗  
+- Connect the `Data` endpoints of the `OrderLookup` and `ProductLookup` components to the `Tools` endpoint of the `OrderLookupAgent`.
+
+---
+
+#### **Validate the Flow** ✅  
+- Click the **Play** button on the `OrderLookupAgent` to verify the flow is configured correctly.  
 
    <img src="assets/langflow-agent-check-flow.png" alt="langflow-agent-check-flow" width="800">
 
-> **🎉 Congratulations!** You’ve successfully created an `OrderLookupAgent` that integrates seamlessly with your Astra DB collections. This agent can now retrieve and aggregate order and product data, a critical component for your customer support system!
+---
+
+> **🎉 Congratulations!** You’ve successfully built an `OrderLookupAgent` that retrieves and combines order and product data from your Astra DB collections. This forms a vital component of your customer support system!
 
 ---
 
 ### Step 8: **Combine Both Flows with a Manager** 🛠️🤖
 
-We now have two flows: the **RAG Flow** and the **Order/Product Lookup Flow**. Let’s combine their powers by introducing a `ManagementAgent`. This agent will intelligently route user inquiries to the right flow, ensuring accurate and complete responses.
+Integrate the **RAG Flow** and **Order/Product Lookup Flow** using a `ManagementAgent`. This agent will intelligently route user inquiries, leveraging both flows for accurate and complete responses.
 
 ---
 
-1. **Rename the RAG Agent:** ✏️
-   - Rename the existing RAG agent to `ManagementAgent` to reflect its role as a central coordinator.
+#### **Rename the RAG Agent** ✏️  
+Rename the existing RAG agent to `ManagementAgent` to reflect its new role as a central coordinator.
 
-2. **Define ManagementAgent’s Role:** 📜
-   - Provide the `ManagementAgent` with clear, detailed instructions to guide its interaction with the FAQ and Order Lookup tools:
-     ```text
-     You are a skilled customer service manager and information router. Your primary responsibility is to use the available tools to accurately address user inquiries and provide detailed, helpful responses. You can:
+---
 
-     - Look up order numbers to retrieve and share order details.
-     - Access product information to provide relevant descriptions or specifications.
-     - Answer frequently asked questions (FAQs) about shipping, returns, placing orders, and more.
+#### **Define ManagementAgent’s Role** 📜  
+Provide the `ManagementAgent` with detailed instructions to guide its use of tools:  
+```text
+You are a skilled customer service manager and information router. Your primary responsibility is to use the available tools to accurately address user inquiries and provide detailed, helpful responses. You can:
 
-     If a query requires multiple tools, combine their outputs to deliver a comprehensive response. 
-     Example: For an inquiry about canceling an order, retrieve the order and product details, and also reference the FAQ for the cancellation policy.
+- Look up order numbers to retrieve and share order details.
+- Access product information to provide relevant descriptions or specifications.
+- Answer frequently asked questions (FAQs) about shipping, returns, placing orders, and more.
 
-     Always aim to deliver clear, concise, and user-focused solutions to ensure the best possible experience.
-     ```
+If a query requires multiple tools, combine their outputs to deliver a comprehensive response.  
+Example: For an inquiry about canceling an order, retrieve the order and product details, and also reference the FAQ for the cancellation policy.
 
-3. **Connect the Tools to ManagementAgent:** 🔗
-   - Link the `OrderLookupAgent` component’s `Toolset` endpoint to the `ManagementAgent` component’s `Tools` endpoint.
+Always aim to deliver clear, concise, and user-focused solutions to ensure the best possible experience.
+```
 
-     <img src="assets/langflow-complete-flow.png" alt="langflow-complete-flow" width="1200">
+---
 
-4. **Test ManagementAgent in the Playground:** 🎮
-   - Click the **Playground** button and enter the following query:
-     ```
-     What is the status of order #1001?
-     ```
-     Confirm that the response combines relevant data from the `Orders` and `Products` collections.
+#### **Connect Tools to ManagementAgent** 🔗  
+- Link the `OrderLookupAgent` component’s `Toolset` endpoint to the `ManagementAgent` component’s `Tools` endpoint.
 
-     <img src="assets/langflow-check-flow.png" alt="langflow-check-flow" width="600">
+   <img src="assets/langflow-complete-flow.png" alt="langflow-complete-flow" width="800">
 
-5. **Conduct Comprehensive Testing:** ✅
-   - **Test Point 1:** Check that responses accurately reflect the data in the `Orders` and `Products` collections. 📋
-   - **Test Point 2:** Try mixed queries (e.g., "How can I cancel order #1001?") to confirm that the `ManagementAgent` routes tasks appropriately. Mixed queries test the agent's ability to handle multiple tools and provide an aggregated response, a crucial feature of a robust AI system. 🔄
+---
 
-> **🎉 Congratulations!** You’ve successfully created a `ManagementAgent` that combines and coordinates the functionalities of the RAG and Order Lookup flows. Your customer support system is now equipped to handle complex and multi-faceted queries with ease.
+#### **Test in the Playground** 🎮  
+- Click the **Playground** button and run this query:  
+   ```
+   What is the status of order #1001?
+   ```  
+- Verify the response combines relevant data from the `Orders` and `Products` collections.
+
+   <img src="assets/langflow-check-flow.png" alt="langflow-check-flow" width="600">
+
+---
+
+#### **Conduct Comprehensive Testing** ✅  
+- **Test Point 1:** Ensure responses match the data in the `Orders` and `Products` collections. 📋  
+- **Test Point 2:** Run mixed queries to validate task routing, such as:  
+   ```
+   How can I cancel order #1001 and what is the shipping policy?
+   ```  
+   Confirm the agent combines multiple tools to provide aggregated responses. 🔄
+
+---
+
+> **🎉 Congratulations!** Your `ManagementAgent` now seamlessly integrates the RAG and Order Lookup flows, enabling your system to handle complex, multi-faceted queries with ease.
 
 ---
 
 ### Step 9: **Integrate with a Python Front End** 🖥️🐍
 
-In this step, we’ll create a user-friendly interface using a Streamlit-based Python application. This front end will connect to your Langflow-powered backend, allowing users to interact with your AI system effortlessly.
+Create a user-friendly interface using Streamlit to connect your Langflow-powered backend with end users seamlessly.
 
-1. **Clone the Repository:** 📁  
-   - Download the application files from GitHub:
+---
+
+#### **Fork the Repository** 🍴  
+- Visit [Agentic AI Workshop](https://github.com/difli/agentic-ai-workshop).  
+- Click **Fork** in the top-right corner of the GitHub page.  
+
+   <img src="assets/github-repo-fork.png" alt="Fork Repository on GitHub" width="800">
+
+---
+
+#### **Clone the Repository** 📁  
+- Clone the forked repository to your local machine:  
+   ```bash
+   git clone https://github.com/YOUR_GITHUB_USERNAME/agentic-ai-workshop.git
+   cd agentic-ai-workshop
+   ```
+
+---
+
+#### **Set Up a Virtual Environment** 🐍  
+- Create and activate a Python virtual environment:  
+   ```bash
+   python3 -m venv venv
+   ```
+   - **On Linux/Mac:**  
      ```bash
-     git clone https://github.com/difli/agentic-ai-workshop.git
-     cd agentic-ai-workshop
+     source venv/bin/activate
      ```
-
-2. **Set Up a Virtual Environment:** 🐍  
-   - Create and activate a Python virtual environment:
+   - **On Windows:**  
      ```bash
-     python3 -m venv venv
-     ```
-     - On Linux/Mac:
-       ```bash
-       source venv/bin/activate
-       ```
-     - On Windows:
-       ```bash
-       venv\Scripts\activate.bat
-       ```
-
-3. **Install Dependencies:** 📦  
-   - Install the required Python packages:
-     ```bash
-     pip install -r ./requirements.txt
+     venv\Scripts\activate.bat
      ```
 
-4. **Configure Secrets:** 🔑  
-   - Copy the example secrets file:
-     ```bash
-     cp .streamlit/secrets.toml.example .streamlit/secrets.toml
-     ```
-   - Open `secrets.toml` and update the placeholders:
-     ```plaintext
-     LANGFLOW_ID = "Your_Langflow_ID"
-     ENDPOINT = "Your_Langflow_Endpoint"
-     APP_TOKEN = "Your_Application_Token"
-     ```
+---
 
-5. **Retrieve Your Credentials:** 🔐  
-   - Log in to your Langflow dashboard.
-   - Click the **API** button to access API credentials.  
+#### **Install Dependencies** 📦  
+- Install the required Python packages:  
+   ```bash
+   pip install -r ./requirements.txt
+   ```
 
-     <img src="assets/langflow-api-button.png" alt="langflow-api-button" width="1200">
+---
 
-   - Click the **Generate Token** button to create an application token. Copy and paste it into your `secrets.toml`.  
-   - Copy your `Langflow ID` from the provided curl command and add it to your `secrets.toml`.  
+#### **Configure Secrets** 🔑  
+- Copy and edit the example secrets file:  
+   ```bash
+   cp .streamlit/secrets.toml.example .streamlit/secrets.toml
+   ```
+- Update the `secrets.toml` file with your credentials:  
+   ```plaintext
+   LANGFLOW_ID = "Your_Langflow_ID"
+   ENDPOINT = "Your_Langflow_Endpoint"
+   APP_TOKEN = "Your_Application_Token"
+   ```
 
-     <img src="assets/langflow-token-and-id.png" alt="langflow-token-and-id" width="800">
+---
 
-6. **Run the Application:** ▶️  
-   - Start the Streamlit server:
-     ```bash
-     streamlit run app.py
-     ```
+#### **Retrieve Langflow Credentials** 🔐  
+- Log in to Langflow, click **API**, and generate a token.  
 
-7. **Interact with the Front End:** 💬  
-   - Open the application in your web browser (e.g., `http://localhost:8501`).
-   - Use the input box or click sample questions like:
-     - "How can I track my order?"
-     - "What is your return policy?"
-     - "Can I cancel order #1004?"
-   <img src="assets/ui.png" alt="ui" width="500">
+   <img src="assets/langflow-api-button.png" alt="API Button on Langflow" width="800">
 
+- Copy your **Langflow ID** from the curl command and paste it into your `secrets.toml`.  
 
-8. **Troubleshooting and Next Steps:** 🔍  
-   - Ensure the virtual environment is activated before running the application.
-   - Double-check API credentials in the `secrets.toml` file.
-   - Expand the application to include additional tools, agents, or custom styling.
+   <img src="assets/langflow-token-and-id.png" alt="Langflow ID and Token" width="600">
+
+---
+
+#### **Run the Application** ▶️  
+- Start the Streamlit server:  
+   ```bash
+   streamlit run app.py
+   ```
+
+---
+
+#### **Test the Front End** 💬  
+- Open the app in your browser (`http://localhost:8501`).  
+- Try sample questions or queries like:
+   - "How can I track my order?"
+   - "What is your return policy?"
+   - "Can I cancel order #1004?"
+
+   <img src="assets/ui.png" alt="Streamlit Front End UI" width="600">
+
+---
+
+#### Understand How `app.py` Works 📝  
+The `app.py` file connects the Streamlit front end with the Langflow backend.  
+Key features include:
+- **API Integration:** The `run_flow()` function sends queries to Langflow and retrieves responses.  
+- **User Interface:** Designed with Streamlit to offer a simple and intuitive experience.  
+
+For a detailed walkthrough of `app.py`, see [Understanding app.py](#appendix-understanding-apppy-).
+
+---
 
 > **🎉 Success!** Your Streamlit front end is up and running, offering an intuitive and professional way for users to interact with your AI-powered customer support system.
+
+---
+
+### Step 10: **Deploy the Application to Streamlit Cloud** 🌐☁️
+
+Now that your application is running locally, let’s deploy it to **Streamlit Cloud** for easy access and sharing. Streamlit Cloud allows you to host your application directly from your GitHub repository.
+
+---
+
+#### Prepare Your Repository 📁  
+Push any local changes to your forked repository:
+```bash
+git add .
+git commit -m "Prepare for Streamlit Cloud deployment"
+git push origin main
+```
+
+---
+
+#### Log In to Streamlit Cloud 🌐  
+- Visit [Streamlit Cloud](https://streamlit.io) and log in using your **GitHub** credentials.
+
+---
+
+#### Create a New Deployment 🚀  
+- On the Streamlit Cloud dashboard, click **Create App**.  
+  <img src="assets/streamlit-create-app.png" alt="Streamlit Create App Button" width="800">
+
+- Fill in the details, specifying your forked GitHub repository. Choose the branch (e.g., `main`) and `app.py` as the entry point.  
+  <img src="assets/streamlit-settings.png" alt="Streamlit App Settings" width="500">
+
+---
+
+#### Set Up Secrets 🔑  
+- Go to the **Advanced Settings** section and locate the **Secrets** tab.  
+- Copy the contents of your local `secrets.toml` file and paste them into the **Secrets Editor**. Include:  
+  ```plaintext
+  LANGFLOW_ID = "Your_Langflow_ID"
+  ENDPOINT = "Your_Langflow_Endpoint"
+  APP_TOKEN = "Your_Application_Token"
+  ```  
+  <img src="assets/streamlit-secrets.png" alt="Streamlit App Secrets" width="500">
+
+---
+
+#### Deploy the Application ▶️  
+- Click **Deploy** and wait for the build process to complete. Streamlit will notify you when the app is live.
+
+---
+
+#### Access and Test Your Application 🌍  
+- Your app will be accessible via a unique URL (e.g., `https://agentic-ai-workshop.streamlit.app`).  
+- Open the app in your browser and test it by:
+  - Trying sample questions like:
+    - "How can I track my order?"
+    - "What is your return policy?"
+  - Using custom queries such as:
+    - "Can I cancel order #1001 and what is the shipping policy?"  
+  <img src="assets/streamlit-application.png" alt="Streamlit Deployed App" width="800">
+
+---
+
+#### Manage Your Deployment 🔄  
+- Use the Streamlit Cloud dashboard to:
+  - Monitor app usage.
+  - Update the app by pushing changes to your GitHub repository.
+  - Redeploy as needed.
+
+---
+
+> **🎉 Success!** Your AI-powered application is now live on Streamlit Cloud, ready to deliver real-time customer support solutions to users anywhere in the world.
 
 ---
 
@@ -573,4 +774,97 @@ In this step, we’ll create a user-friendly interface using a Streamlit-based P
 
 ## Call to Action 🚀✨
 
-🎉 Congratulations on building a cutting-edge AI system! Expand your skills further by exploring new use cases like inventory management, knowledge retrieval, or personalized recommendations. Let's innovate together! 🚀
+🎉 Congratulations on building a cutting-edge AI system! Expand your skills further by exploring new use cases like inventory management, knowledge retrieval, or personalized recommendations. Let's innovate! 🚀
+
+🤔 **What will you build next?** The tools are in your hands. 💡🌟
+
+---
+
+## Appendix: Understanding `app.py` 📝
+
+The `app.py` file serves as the backbone of your application, connecting the **Streamlit** front end with the **Langflow-powered backend**. Here's a breakdown of its key components:
+
+---
+
+### **API Integration**
+
+The `run_flow()` function is responsible for communicating with the Langflow backend:
+- **Base API URL**: Retrieved from the `secrets.toml` file (`LANGFLOW_ID`, `ENDPOINT`, and `APP_TOKEN`).
+- **Payload**: Sends user input to the backend in JSON format.
+- **Response Handling**: Extracts the AI-generated response for display in the UI.
+
+Code Snippet:
+```python
+def run_flow(message: str) -> dict:
+    api_url = f"{BASE_API_URL}/lf/{LANGFLOW_ID}/api/v1/run/{ENDPOINT}"
+
+    payload = {
+        "input_value": message,
+        "output_type": "chat",
+        "input_type": "chat",
+    }
+
+    headers = {"Authorization": "Bearer " + APPLICATION_TOKEN, "Content-Type": "application/json"}
+    response = requests.post(api_url, json=payload, headers=headers)
+    return response.json()
+```
+
+---
+
+### **Streamlit Front End**
+
+The Streamlit front end provides an intuitive interface for user interactions:
+- **Chat Input and Output**: Users submit queries, and AI responses are displayed as styled chat bubbles.
+- **Sample Questions**: Buttons provide quick access to predefined queries.
+- **Custom Styling**: CSS enhances the visual appeal of the chat interface.
+
+Code Snippet (Input and Response Handling):
+```python
+# Display chat history
+for message in st.session_state["messages"]:
+    # User's message
+    st.markdown(f'<div class="chat-bubble-user">{message["user"]}</div>', unsafe_allow_html=True)
+    # Bot's response
+    st.markdown(f'<div class="chat-bubble">{message["bot"]}</div>', unsafe_allow_html=True)
+```
+
+---
+
+### **Custom Styling**
+
+Custom CSS styles ensure the app is visually appealing and user-friendly. Example:
+```css
+.chat-bubble {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border-radius: 15px;
+}
+```
+
+---
+
+### **Secrets Management**
+
+The `secrets.toml` file stores sensitive credentials:
+- **Langflow ID**: Identifies the specific flow to connect.
+- **Application Token**: Authenticates API requests.
+- **Endpoint**: Specifies the Langflow backend entry point.
+
+---
+
+### **How It All Comes Together**
+
+The app performs these key steps:
+1. Users submit a query via the Streamlit interface.
+2. The query is sent to Langflow through the `run_flow()` function.
+3. Langflow processes the query using your custom flow and returns a response.
+4. The response is displayed in the Streamlit UI, styled as chat bubbles.
+
+---
+
+By understanding `app.py`, you can:
+- Customize its functionality for your specific use case.
+- Add more features, like new buttons or additional styling.
+
+> **Next Steps:** Experiment with `app.py` to expand your app's capabilities!
