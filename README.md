@@ -1,6 +1,6 @@
 # Mastering Agentic AI with Langflow and Astra DB 🚀
 
-<img src="assets/banner.jpg" alt="Workshop Banner" width="800">
+<img src="assets/banner.png" alt="Workshop Banner" width="800">
 
 ---
 
