@@ -513,7 +513,7 @@ Create a flow that retrieves order details and related product information from 
 ---
 
 #### **Connect Components** 🔗  
-- Connect the `Data` endpoints of the `OrderLookup` and `ProductLookup` components to the `Tools` endpoint of the `OrderLookupAgent`.
+- Connect the `Tool` endpoints of the `OrderLookup` and `ProductLookup` components to the `Tools` endpoint of the `OrderLookupAgent`.
 
 ---
 
