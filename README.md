@@ -220,20 +220,18 @@ The agent we developed so far cannot answer questions specific to our context an
 ---
 
 #### **Add an Astra DB Component** 🗄️  
-- Drag an `Astra DB` component onto the canvas from the **Vector Stores** section.  
-- Use this component to store and retrieve vectorized FAQ data.
+- Drag an `Astra DB` component onto the canvas from the **Vector Stores** section. 
+- Switch the `Astra DB` component into `Tool Mode`
 
----
-
-#### **Add a Retriever Tool** 🛠️  
-- Drag a `RetrieverTool` component onto the canvas from the **Tools** section.  
+   <img src="assets/langflow-astra-vector-tool-mode.png" alt="langflow-astra-vector-tool-mode" width="200">
+  
+- Use this tool to retrieve vectorized FAQ data.
 - This tool enables the agent to search the FAQ database for relevant information.
 
 ---
 
 #### **Connect the Components** 🔗  
-- Link the `Retriever` output of the `Astra DB` component to the `Retriever` input of the `RetrieverTool`.  
-- Connect the `Tools` output of the `RetrieverTool` component to the `Agent` component.
+- Link the `Astra DB` tool to the `Agent` component.  
 
    <img src="assets/langflow-rag-flow.png" alt="langflow-rag-flow" width="1200">
 
@@ -242,7 +240,7 @@ The agent we developed so far cannot answer questions specific to our context an
 #### **Create a New Database in Astra DB** 📋  
 - In the `Astra DB` component, click **Add New Database** to create a new database.
 
-   <img src="assets/langflow-create-database.png" alt="langflow-create-database" width="800">
+   <img src="assets/langflow-create-database.png" alt="langflow-create-database" width="200">
 
 - Fill in the required details and click **Create Database**.
 
@@ -280,21 +278,15 @@ The agent we developed so far cannot answer questions specific to our context an
 #### **Configure the Astra DB Component** ⚙️  
 - Fill in the following details in the `Astra DB` component:
    - **Collection Name:** `faq`
-   - **Embedding Model or Astra Vectorize:** `Astra Vectorize`
-   - **Embedding Provider:** `Nvidia`
-   - **Model:** `NV-Embed-QA`
 
-   <img src="assets/langflow-astradb-vector-component.png" alt="langflow-astradb-vector-component" width="300">
+   <img src="assets/langflow-astra-vector-tool-mode.png" alt="langflow-astra-vector-tool-mode" width="200">
 
----
-
-#### **Configure the Retriever Tool** 🛠️  
-- Provide the `RetrieverTool` with:
-   - **Name:** `FAQ`
-   - **Description:**  
+- Extend the tool description. Click `Edit tools` and extend the `Tool Description` with: 
      ```text
      Answer frequently asked questions (FAQs) about shipping, returns, placing orders, and more.
      ```
+
+   <img src="assets/langflow-astra-tool-description.png" alt="langflow-astra-tool-description" width="800">
 
 ---
 
@@ -365,12 +357,8 @@ The agent cannot yet provide proper answers because it lacks the necessary infor
 
 #### **Configure the Astra DB Component** ⚙️  
 - Fill in the following details:  
+  - **Database Name:** `customer-support`  
   - **Collection Name:** `faq`  
-  - **Embedding Model or Astra Vectorize:** `Astra Vectorize`  
-  - **Embedding Provider:** `Nvidia`  
-  - **Model:** `NV-Embed-QA`  
-
-   <img src="assets/langflow-astradb-vector-component.png" alt="langflow-astradb-vector-component" width="300">
 
 ---
 
@@ -508,7 +496,7 @@ Create a flow that retrieves order details and related product information from 
     ```  
   - Enable **Tool Mode** and rename the agent to `OrderLookupAgent`.  
 
-   <img src="assets/langflow-agent-tool-mode.png" alt="langflow-agent-tool-mode" width="500">
+   <img src="assets/langflow-agent-tool-mode.png" alt="langflow-agent-tool-mode" width="200">
 
 ---
 
