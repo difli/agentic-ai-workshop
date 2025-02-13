@@ -223,7 +223,7 @@ The agent we developed so far cannot answer questions specific to our context an
 - Drag an `Astra DB` component onto the canvas from the **Vector Stores** section. 
 - Switch the `Astra DB` component into `Tool Mode`
 
-   <img src="assets/langflow-astra-vector-tool-mode.png" alt="langflow-astra-vector-tool-mode" width="200">
+   <img src="assets/langflow-astra-vector-tool-mode.png" alt="langflow-astra-vector-tool-mode" width="300">
   
 - Use this tool to retrieve vectorized FAQ data.
 - This tool enables the agent to search the FAQ database for relevant information.
@@ -240,7 +240,7 @@ The agent we developed so far cannot answer questions specific to our context an
 #### **Create a New Database in Astra DB** 📋  
 - In the `Astra DB` component, click **Add New Database** to create a new database.
 
-   <img src="assets/langflow-create-database.png" alt="langflow-create-database" width="200">
+   <img src="assets/langflow-create-database.png" alt="langflow-create-database" width="300">
 
 - Fill in the required details and click **Create Database**.
 
@@ -279,7 +279,7 @@ The agent we developed so far cannot answer questions specific to our context an
 - Fill in the following details in the `Astra DB` component:
    - **Collection Name:** `faq`
 
-   <img src="assets/langflow-astra-vector-tool-mode.png" alt="langflow-astra-vector-tool-mode" width="200">
+   <img src="assets/langflow-astra-vector-tool-mode.png" alt="langflow-astra-vector-tool-mode" width="300">
 
 - Extend the tool description. Click `Edit tools` and extend the `Tool Description` with: 
      ```text
@@ -496,7 +496,7 @@ Create a flow that retrieves order details and related product information from 
     ```  
   - Enable **Tool Mode** and rename the agent to `OrderLookupAgent`.  
 
-   <img src="assets/langflow-agent-tool-mode.png" alt="langflow-agent-tool-mode" width="200">
+   <img src="assets/langflow-agent-tool-mode.png" alt="langflow-agent-tool-mode" width="300">
 
 ---
 
