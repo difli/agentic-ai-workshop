@@ -223,7 +223,7 @@ The agent we developed so far cannot answer questions specific to our context an
 ---
 
 #### **Create a New Database in Astra DB** 📋  
-- In the [`Astra DB` ui](https://astra.datastax.com), click **Creae Database** to create a new database.
+- In the [`Astra DB` ui](https://astra.datastax.com), click **Create Database** to create a new database.
 
    <img src="assets/astra-create-db.png" alt="astra create db" width="800">
 
@@ -231,7 +231,7 @@ The agent we developed so far cannot answer questions specific to our context an
   - **Type** `Serverless (Vector)`  
   - **Database Name:** `customer-support`  
   - **Provider:** `Amazon Web Services`  
-  - **Region:** `us-wast-2`  
+  - **Region:** `us-east-2`  
 
    <img src="assets/astra-create-db-2.png" alt="langflow-create-database-1" width="500">
 
