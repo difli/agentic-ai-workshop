@@ -71,7 +71,8 @@ This workshop assumes you have access to:
 
 Additionally, create free accounts for:
 - **Streamlit**: Follow the [quickstart guide](https://docs.streamlit.io/streamlit-community-cloud/get-started/quickstart).
-- **Langflow**: [Sign up here](https://astra.datastax.com/signup?type=langflow).
+- **Langflow**: Attendees will be provided access to a self-managed Langflow instance at `http://34.173.224.173:7860/`.
+- **Astra DB**: Sign up for an account at [Astra DB](https://astra.datastax.com/signup).
 
 ---
 
@@ -88,7 +89,8 @@ Start by setting up a new flow in Langflow, the foundation for your project.
 ---
 
 #### **Create a New Flow** ➕  
-- Open [Langflow](https://astra.datastax.com/langflow) and click **New Flow** on the dashboard.  
+- Open **the Langflow instance at** `http://34.173.224.173:7860/`.
+- Click **New Flow** on the dashboard.  
 - This will open the flow creation interface.  
 
    <img src="assets/langflow-new-flow.png" alt="langflow-new-flow" width="800">
