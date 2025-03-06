@@ -278,11 +278,6 @@ The agent we developed so far cannot answer questions specific to our context an
 
 ---
 
-#### **Switch Back to Langflow** ↩️  
-- Return to Langflow to continue configuring the RAG flow.
-
----
-
 #### **Configure the Astra DB Component** ⚙️  
 - Fill in the following details in the `Astra DB` component:
    - **Collection Name:** `faq`
