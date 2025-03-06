@@ -68,10 +68,10 @@ Let’s dive in!
 This workshop assumes you have access to:
 1. A **[GitHub account](https://github.com)**.
 2. A paid **OpenAI account**. *(We will provide API keys if needed.)*
+3. **Langflow**: Attendees will be provided access to a self-managed Langflow instance at [http://34.173.224.173:7860](http://34.173.224.173:7860/).
 
 Additionally, create free accounts for:
 - **Streamlit**: Follow the [quickstart guide](https://docs.streamlit.io/streamlit-community-cloud/get-started/quickstart).
-- **Langflow**: Attendees will be provided access to a self-managed Langflow instance at `http://34.173.224.173:7860/`.
 - **Astra DB**: Sign up for an account at [Astra DB](https://astra.datastax.com/signup).
 
 ---
@@ -89,7 +89,8 @@ Start by setting up a new flow in Langflow, the foundation for your project.
 ---
 
 #### **Create a New Flow** ➕  
-- Open **the Langflow instance at** `http://34.173.224.173:7860/`.
+- Open **the Langflow instance at** [http://34.173.227.159:7860](http://34.173.227.159:7860).
+- Sign up and login into Langflow.
 - Click **New Flow** on the dashboard.  
 - This will open the flow creation interface.  
 
@@ -255,8 +256,6 @@ The agent we developed so far cannot answer questions specific to our context an
 #### **Switch to Astra DB** 🔄  
 - Open Astra DB and navigate to your newly created database.
 
-   <img src="assets/langflow-switch-to-astradb.png" alt="langflow-switch-to-astradb" width="500">
-
 ---
 
 #### **Create an FAQ Collection** 🗂️  
@@ -272,8 +271,6 @@ The agent we developed so far cannot answer questions specific to our context an
 
 #### **Switch Back to Langflow** ↩️  
 - Return to Langflow to continue configuring the RAG flow.
-
-   <img src="assets/astradb-switch-to-langflow.png" alt="astradb-switch-to-langflow" width="800">
 
 ---
 
@@ -402,8 +399,6 @@ Enable your customer support system to retrieve order and product details by upl
 #### **Switch to Astra DB** 🔄  
 - Navigate from Langflow to Astra DB.
 
-   <img src="assets/langflow-switch-to-astradb.png" alt="langflow-switch-to-astradb" width="500">
-
 ---
 
 #### **Create the `Orders` Collection** 📝  
@@ -449,8 +444,6 @@ Enable your customer support system to retrieve order and product details by upl
 
 #### **Return to Langflow** 🔙  
 - After completing the data uploads, switch back to Langflow to continue building your flows.  
-
-   <img src="assets/astradb-switch-to-langflow.png" alt="astradb-switch-to-langflow" width="800">
 
 ---
 
@@ -585,7 +578,7 @@ Create a user-friendly interface using Streamlit to connect your Langflow-powere
 ---
 
 #### **Fork the Repository** 🍴  
-- Visit [Agentic AI Workshop](https://github.com/difli/agentic-ai-workshop).  
+- Visit [Agentic AI Workshop](https://github.com/difli/agentic-ai-workshop/tree/self-managed).  
 - Click **Fork** in the top-right corner of the GitHub page.  
 
    <img src="assets/github-repo-fork.png" alt="Fork Repository on GitHub" width="800">
@@ -597,6 +590,7 @@ Create a user-friendly interface using Streamlit to connect your Langflow-powere
    ```bash
    git clone https://github.com/YOUR_GITHUB_USERNAME/agentic-ai-workshop.git
    cd agentic-ai-workshop
+   git checkout self-managed
    ```
 
 ---
@@ -634,9 +628,15 @@ Create a user-friendly interface using Streamlit to connect your Langflow-powere
 
 #### **Retrieve Langflow Credentials** 🔐  
 
-- Log in to Langflow, click **API**.
+- Log in to Langflow, click **the avatar** in the right hand upper corner.
 
-   <img src="assets/langflow-api-button.png" alt="API Button on Langflow" width="800">
+   <img src="assets/langflow-settings.png" alt="Langflow Settings" width="800">
+
+- Click **Settings**
+- Click **Langflow API Keys**
+- Click **Add New**
+
+   <img src="assets/langflow-api-key.png" alt="Langflow api key" width="800">
 
 - Click **Generate Token**.  
 
@@ -733,9 +733,8 @@ git push origin main
 - Go to the **Advanced Settings** section and locate the **Secrets** tab.  
 - Copy the contents of your local `secrets.toml` file and paste them into the **Secrets Editor**. Include:  
   ```plaintext
-  LANGFLOW_ID = "Your_Langflow_ID"
-  ENDPOINT = "Your_Langflow_Endpoint"
-  APP_TOKEN = "Your_Application_Token"
+  LANGFLOW_API_URL = "Your_Langflow_Endpoint"  # Change this to your Langflow server IP
+  LANGFLOW_API_KEY = "Your_Langflow_Api_key"
   ```  
   <img src="assets/streamlit-secrets.png" alt="Streamlit App Secrets" width="500">
 

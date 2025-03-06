@@ -1,22 +1,22 @@
 {
-  "updated_at": "2025-02-13T13:43:10+00:00",
+  "updated_at": "2025-03-06T13:40:29+00:00",
   "icon": null,
   "name": "Customer Support",
   "webhook": false,
   "description": "Create, Connect, Converse.",
   "icon_bg_color": null,
   "endpoint_name": "customer-support2",
-  "user_id": "e9050076-b22e-4ea0-a383-8004b04f9c87",
-  "id": "24070547-b442-4cc6-95b0-32a4d6670c15",
+  "user_id": "4c038544-af54-430e-bd71-b35563102fb1",
+  "id": "7ee7ebaa-3195-423a-a100-c117686202a1",
   "tags": null,
   "gradient": null,
   "locked": false,
-  "folder_id": "4dc7bb5e-37c1-4052-b122-cf9f159d5146",
+  "folder_id": "ff728f2a-cbcd-462e-b049-7257f4623981",
   "is_component": false,
   "data": {
     "nodes": [
       {
-        "id": "ChatInput-TW4xI",
+        "id": "ChatInput-GARTT",
         "type": "genericNode",
         "position": {
           "x": 1223.2944970105304,
@@ -312,10 +312,10 @@
             "edited": false,
             "metadata": {},
             "tool_mode": false,
-            "lf_version": "1.1.4.post1"
+            "lf_version": "1.1.4"
           },
           "type": "ChatInput",
-          "id": "ChatInput-TW4xI"
+          "id": "ChatInput-GARTT"
         },
         "selected": false,
         "width": 320,
@@ -331,7 +331,7 @@
         }
       },
       {
-        "id": "ChatOutput-jADxU",
+        "id": "ChatOutput-PllF6",
         "type": "genericNode",
         "position": {
           "x": 2112.0517876812446,
@@ -608,10 +608,10 @@
             "edited": false,
             "metadata": {},
             "tool_mode": false,
-            "lf_version": "1.1.4.post1"
+            "lf_version": "1.1.4"
           },
           "type": "ChatOutput",
-          "id": "ChatOutput-jADxU"
+          "id": "ChatOutput-PllF6"
         },
         "selected": false,
         "width": 320,
@@ -627,7 +627,7 @@
         }
       },
       {
-        "id": "Agent-ONSLx",
+        "id": "Agent-Gg5G7",
         "type": "genericNode",
         "position": {
           "x": 1635.6580849780748,
@@ -730,7 +730,6 @@
                   "Groq",
                   "NVIDIA",
                   "OpenAI",
-                  "SambaNova",
                   "Custom"
                 ],
                 "options_metadata": [],
@@ -777,7 +776,7 @@
                 "list": false,
                 "show": true,
                 "multiline": true,
-                "value": "from langchain_core.tools import StructuredTool\n\nfrom langflow.base.agents.agent import LCToolsAgentComponent\nfrom langflow.base.agents.events import ExceptionWithMessageError\nfrom langflow.base.models.model_input_constants import (\n    ALL_PROVIDER_FIELDS,\n    MODEL_DYNAMIC_UPDATE_FIELDS,\n    MODEL_PROVIDERS_DICT,\n)\nfrom langflow.base.models.model_utils import get_model_name\nfrom langflow.components.helpers import CurrentDateComponent\nfrom langflow.components.helpers.memory import MemoryComponent\nfrom langflow.components.langchain_utilities.tool_calling import ToolCallingAgentComponent\nfrom langflow.custom.custom_component.component import _get_component_toolkit\nfrom langflow.custom.utils import update_component_build_config\nfrom langflow.field_typing import Tool\nfrom langflow.io import BoolInput, DropdownInput, MultilineInput, Output\nfrom langflow.logging import logger\nfrom langflow.schema.dotdict import dotdict\nfrom langflow.schema.message import Message\n\n\ndef set_advanced_true(component_input):\n    component_input.advanced = True\n    return component_input\n\n\nclass AgentComponent(ToolCallingAgentComponent):\n    display_name: str = \"Agent\"\n    description: str = \"Define the agent's instructions, then enter a task to complete using tools.\"\n    icon = \"bot\"\n    beta = False\n    name = \"Agent\"\n\n    memory_inputs = [set_advanced_true(component_input) for component_input in MemoryComponent().inputs]\n\n    inputs = [\n        DropdownInput(\n            name=\"agent_llm\",\n            display_name=\"Model Provider\",\n            info=\"The provider of the language model that the agent will use to generate responses.\",\n            options=[*sorted(MODEL_PROVIDERS_DICT.keys()), \"Custom\"],\n            value=\"OpenAI\",\n            real_time_refresh=True,\n            input_types=[],\n        ),\n        *MODEL_PROVIDERS_DICT[\"OpenAI\"][\"inputs\"],\n        MultilineInput(\n            name=\"system_prompt\",\n            display_name=\"Agent Instructions\",\n            info=\"System Prompt: Initial instructions and context provided to guide the agent's behavior.\",\n            value=\"You are a helpful assistant that can use tools to answer questions and perform tasks.\",\n            advanced=False,\n        ),\n        *LCToolsAgentComponent._base_inputs,\n        *memory_inputs,\n        BoolInput(\n            name=\"add_current_date_tool\",\n            display_name=\"Current Date\",\n            advanced=True,\n            info=\"If true, will add a tool to the agent that returns the current date.\",\n            value=True,\n        ),\n    ]\n    outputs = [Output(name=\"response\", display_name=\"Response\", method=\"message_response\")]\n\n    async def message_response(self) -> Message:\n        try:\n            # Get LLM model and validate\n            llm_model, display_name = self.get_llm()\n            if llm_model is None:\n                msg = \"No language model selected. Please choose a model to proceed.\"\n                raise ValueError(msg)\n            self.model_name = get_model_name(llm_model, display_name=display_name)\n\n            # Get memory data\n            self.chat_history = await self.get_memory_data()\n\n            # Add current date tool if enabled\n            if self.add_current_date_tool:\n                if not isinstance(self.tools, list):  # type: ignore[has-type]\n                    self.tools = []\n                current_date_tool = (await CurrentDateComponent(**self.get_base_args()).to_toolkit()).pop(0)\n                if not isinstance(current_date_tool, StructuredTool):\n                    msg = \"CurrentDateComponent must be converted to a StructuredTool\"\n                    raise TypeError(msg)\n                self.tools.append(current_date_tool)\n\n            # Validate tools\n            if not self.tools:\n                msg = \"Tools are required to run the agent. Please add at least one tool.\"\n                raise ValueError(msg)\n\n            # Set up and run agent\n            self.set(\n                llm=llm_model,\n                tools=self.tools,\n                chat_history=self.chat_history,\n                input_value=self.input_value,\n                system_prompt=self.system_prompt,\n            )\n            agent = self.create_agent_runnable()\n            return await self.run_agent(agent)\n\n        except (ValueError, TypeError, KeyError) as e:\n            logger.error(f\"{type(e).__name__}: {e!s}\")\n            raise\n        except ExceptionWithMessageError as e:\n            logger.error(f\"ExceptionWithMessageError occurred: {e}\")\n            raise\n        except Exception as e:\n            logger.error(f\"Unexpected error: {e!s}\")\n            raise\n\n    async def get_memory_data(self):\n        memory_kwargs = {\n            component_input.name: getattr(self, f\"{component_input.name}\") for component_input in self.memory_inputs\n        }\n        # filter out empty values\n        memory_kwargs = {k: v for k, v in memory_kwargs.items() if v}\n\n        return await MemoryComponent(**self.get_base_args()).set(**memory_kwargs).retrieve_messages()\n\n    def get_llm(self):\n        if not isinstance(self.agent_llm, str):\n            return self.agent_llm, None\n\n        try:\n            provider_info = MODEL_PROVIDERS_DICT.get(self.agent_llm)\n            if not provider_info:\n                msg = f\"Invalid model provider: {self.agent_llm}\"\n                raise ValueError(msg)\n\n            component_class = provider_info.get(\"component_class\")\n            display_name = component_class.display_name\n            inputs = provider_info.get(\"inputs\")\n            prefix = provider_info.get(\"prefix\", \"\")\n\n            return self._build_llm_model(component_class, inputs, prefix), display_name\n\n        except Exception as e:\n            logger.error(f\"Error building {self.agent_llm} language model: {e!s}\")\n            msg = f\"Failed to initialize language model: {e!s}\"\n            raise ValueError(msg) from e\n\n    def _build_llm_model(self, component, inputs, prefix=\"\"):\n        model_kwargs = {input_.name: getattr(self, f\"{prefix}{input_.name}\") for input_ in inputs}\n        return component.set(**model_kwargs).build_model()\n\n    def set_component_params(self, component):\n        provider_info = MODEL_PROVIDERS_DICT.get(self.agent_llm)\n        if provider_info:\n            inputs = provider_info.get(\"inputs\")\n            prefix = provider_info.get(\"prefix\")\n            model_kwargs = {input_.name: getattr(self, f\"{prefix}{input_.name}\") for input_ in inputs}\n\n            return component.set(**model_kwargs)\n        return component\n\n    def delete_fields(self, build_config: dotdict, fields: dict | list[str]) -> None:\n        \"\"\"Delete specified fields from build_config.\"\"\"\n        for field in fields:\n            build_config.pop(field, None)\n\n    def update_input_types(self, build_config: dotdict) -> dotdict:\n        \"\"\"Update input types for all fields in build_config.\"\"\"\n        for key, value in build_config.items():\n            if isinstance(value, dict):\n                if value.get(\"input_types\") is None:\n                    build_config[key][\"input_types\"] = []\n            elif hasattr(value, \"input_types\") and value.input_types is None:\n                value.input_types = []\n        return build_config\n\n    async def update_build_config(\n        self, build_config: dotdict, field_value: str, field_name: str | None = None\n    ) -> dotdict:\n        # Iterate over all providers in the MODEL_PROVIDERS_DICT\n        # Existing logic for updating build_config\n        if field_name in (\"agent_llm\",):\n            build_config[\"agent_llm\"][\"value\"] = field_value\n            provider_info = MODEL_PROVIDERS_DICT.get(field_value)\n            if provider_info:\n                component_class = provider_info.get(\"component_class\")\n                if component_class and hasattr(component_class, \"update_build_config\"):\n                    # Call the component class's update_build_config method\n                    build_config = await update_component_build_config(\n                        component_class, build_config, field_value, \"model_name\"\n                    )\n\n            provider_configs: dict[str, tuple[dict, list[dict]]] = {\n                provider: (\n                    MODEL_PROVIDERS_DICT[provider][\"fields\"],\n                    [\n                        MODEL_PROVIDERS_DICT[other_provider][\"fields\"]\n                        for other_provider in MODEL_PROVIDERS_DICT\n                        if other_provider != provider\n                    ],\n                )\n                for provider in MODEL_PROVIDERS_DICT\n            }\n            if field_value in provider_configs:\n                fields_to_add, fields_to_delete = provider_configs[field_value]\n\n                # Delete fields from other providers\n                for fields in fields_to_delete:\n                    self.delete_fields(build_config, fields)\n\n                # Add provider-specific fields\n                if field_value == \"OpenAI\" and not any(field in build_config for field in fields_to_add):\n                    build_config.update(fields_to_add)\n                else:\n                    build_config.update(fields_to_add)\n                # Reset input types for agent_llm\n                build_config[\"agent_llm\"][\"input_types\"] = []\n            elif field_value == \"Custom\":\n                # Delete all provider fields\n                self.delete_fields(build_config, ALL_PROVIDER_FIELDS)\n                # Update with custom component\n                custom_component = DropdownInput(\n                    name=\"agent_llm\",\n                    display_name=\"Language Model\",\n                    options=[*sorted(MODEL_PROVIDERS_DICT.keys()), \"Custom\"],\n                    value=\"Custom\",\n                    real_time_refresh=True,\n                    input_types=[\"LanguageModel\"],\n                )\n                build_config.update({\"agent_llm\": custom_component.to_dict()})\n            # Update input types for all fields\n            build_config = self.update_input_types(build_config)\n\n            # Validate required keys\n            default_keys = [\n                \"code\",\n                \"_type\",\n                \"agent_llm\",\n                \"tools\",\n                \"input_value\",\n                \"add_current_date_tool\",\n                \"system_prompt\",\n                \"agent_description\",\n                \"max_iterations\",\n                \"handle_parsing_errors\",\n                \"verbose\",\n            ]\n            missing_keys = [key for key in default_keys if key not in build_config]\n            if missing_keys:\n                msg = f\"Missing required keys in build_config: {missing_keys}\"\n                raise ValueError(msg)\n        if (\n            isinstance(self.agent_llm, str)\n            and self.agent_llm in MODEL_PROVIDERS_DICT\n            and field_name in MODEL_DYNAMIC_UPDATE_FIELDS\n        ):\n            provider_info = MODEL_PROVIDERS_DICT.get(self.agent_llm)\n            if provider_info:\n                component_class = provider_info.get(\"component_class\")\n                component_class = self.set_component_params(component_class)\n                prefix = provider_info.get(\"prefix\")\n                if component_class and hasattr(component_class, \"update_build_config\"):\n                    # Call each component class's update_build_config method\n                    # remove the prefix from the field_name\n                    if isinstance(field_name, str) and isinstance(prefix, str):\n                        field_name = field_name.replace(prefix, \"\")\n                    build_config = await update_component_build_config(\n                        component_class, build_config, field_value, \"model_name\"\n                    )\n        return dotdict({k: v.to_dict() if hasattr(v, \"to_dict\") else v for k, v in build_config.items()})\n\n    async def to_toolkit(self) -> list[Tool]:\n        component_toolkit = _get_component_toolkit()\n        tools_names = self._build_tools_names()\n        agent_description = self.get_tool_description()\n        # TODO: Agent Description Depreciated Feature to be removed\n        description = f\"{agent_description}{tools_names}\"\n        tools = component_toolkit(component=self).get_tools(\n            tool_name=self.get_tool_name(), tool_description=description, callbacks=self.get_langchain_callbacks()\n        )\n        if hasattr(self, \"tools_metadata\"):\n            tools = component_toolkit(component=self, metadata=self.tools_metadata).update_tools_metadata(tools=tools)\n        return tools\n",
+                "value": "from langchain_core.tools import StructuredTool\n\nfrom langflow.base.agents.agent import LCToolsAgentComponent\nfrom langflow.base.models.model_input_constants import (\n    ALL_PROVIDER_FIELDS,\n    MODEL_DYNAMIC_UPDATE_FIELDS,\n    MODEL_PROVIDERS_DICT,\n)\nfrom langflow.base.models.model_utils import get_model_name\nfrom langflow.components.helpers import CurrentDateComponent\nfrom langflow.components.helpers.memory import MemoryComponent\nfrom langflow.components.langchain_utilities.tool_calling import ToolCallingAgentComponent\nfrom langflow.custom.custom_component.component import _get_component_toolkit\nfrom langflow.custom.utils import update_component_build_config\nfrom langflow.field_typing import Tool\nfrom langflow.io import BoolInput, DropdownInput, MultilineInput, Output\nfrom langflow.logging import logger\nfrom langflow.schema.dotdict import dotdict\nfrom langflow.schema.message import Message\n\n\ndef set_advanced_true(component_input):\n    component_input.advanced = True\n    return component_input\n\n\nclass AgentComponent(ToolCallingAgentComponent):\n    display_name: str = \"Agent\"\n    description: str = \"Define the agent's instructions, then enter a task to complete using tools.\"\n    icon = \"bot\"\n    beta = False\n    name = \"Agent\"\n\n    memory_inputs = [set_advanced_true(component_input) for component_input in MemoryComponent().inputs]\n\n    inputs = [\n        DropdownInput(\n            name=\"agent_llm\",\n            display_name=\"Model Provider\",\n            info=\"The provider of the language model that the agent will use to generate responses.\",\n            options=[*sorted(MODEL_PROVIDERS_DICT.keys()), \"Custom\"],\n            value=\"OpenAI\",\n            real_time_refresh=True,\n            input_types=[],\n        ),\n        *MODEL_PROVIDERS_DICT[\"OpenAI\"][\"inputs\"],\n        MultilineInput(\n            name=\"system_prompt\",\n            display_name=\"Agent Instructions\",\n            info=\"System Prompt: Initial instructions and context provided to guide the agent's behavior.\",\n            value=\"You are a helpful assistant that can use tools to answer questions and perform tasks.\",\n            advanced=False,\n        ),\n        *LCToolsAgentComponent._base_inputs,\n        *memory_inputs,\n        BoolInput(\n            name=\"add_current_date_tool\",\n            display_name=\"Current Date\",\n            advanced=True,\n            info=\"If true, will add a tool to the agent that returns the current date.\",\n            value=True,\n        ),\n    ]\n    outputs = [Output(name=\"response\", display_name=\"Response\", method=\"message_response\")]\n\n    async def message_response(self) -> Message:\n        try:\n            llm_model, display_name = self.get_llm()\n            if llm_model is None:\n                msg = \"No language model selected\"\n                raise ValueError(msg)\n            self.model_name = get_model_name(llm_model, display_name=display_name)\n        except Exception as e:\n            # Log the error for debugging purposes\n            logger.error(f\"Error retrieving language model: {e}\")\n            raise\n\n        try:\n            self.chat_history = await self.get_memory_data()\n        except Exception as e:\n            logger.error(f\"Error retrieving chat history: {e}\")\n            raise\n\n        if self.add_current_date_tool:\n            try:\n                if not isinstance(self.tools, list):  # type: ignore[has-type]\n                    self.tools = []\n                # Convert CurrentDateComponent to a StructuredTool\n                current_date_tool = (await CurrentDateComponent(**self.get_base_args()).to_toolkit()).pop(0)\n                if isinstance(current_date_tool, StructuredTool):\n                    self.tools.append(current_date_tool)\n                else:\n                    msg = \"CurrentDateComponent must be converted to a StructuredTool\"\n                    raise TypeError(msg)\n            except Exception as e:\n                logger.error(f\"Error adding current date tool: {e}\")\n                raise\n\n        if not self.tools:\n            msg = \"Tools are required to run the agent.\"\n            logger.error(msg)\n            raise ValueError(msg)\n\n        try:\n            self.set(\n                llm=llm_model,\n                tools=self.tools,\n                chat_history=self.chat_history,\n                input_value=self.input_value,\n                system_prompt=self.system_prompt,\n            )\n            agent = self.create_agent_runnable()\n        except Exception as e:\n            logger.error(f\"Error setting up the agent: {e}\")\n            raise\n\n        return await self.run_agent(agent)\n\n    async def get_memory_data(self):\n        memory_kwargs = {\n            component_input.name: getattr(self, f\"{component_input.name}\") for component_input in self.memory_inputs\n        }\n        # filter out empty values\n        memory_kwargs = {k: v for k, v in memory_kwargs.items() if v}\n\n        return await MemoryComponent(**self.get_base_args()).set(**memory_kwargs).retrieve_messages()\n\n    def get_llm(self):\n        if isinstance(self.agent_llm, str):\n            try:\n                provider_info = MODEL_PROVIDERS_DICT.get(self.agent_llm)\n                if provider_info:\n                    component_class = provider_info.get(\"component_class\")\n                    display_name = component_class.display_name\n                    inputs = provider_info.get(\"inputs\")\n                    prefix = provider_info.get(\"prefix\", \"\")\n                    return (\n                        self._build_llm_model(component_class, inputs, prefix),\n                        display_name,\n                    )\n            except Exception as e:\n                msg = f\"Error building {self.agent_llm} language model\"\n                raise ValueError(msg) from e\n        return self.agent_llm, None\n\n    def _build_llm_model(self, component, inputs, prefix=\"\"):\n        model_kwargs = {input_.name: getattr(self, f\"{prefix}{input_.name}\") for input_ in inputs}\n        return component.set(**model_kwargs).build_model()\n\n    def set_component_params(self, component):\n        provider_info = MODEL_PROVIDERS_DICT.get(self.agent_llm)\n        if provider_info:\n            inputs = provider_info.get(\"inputs\")\n            prefix = provider_info.get(\"prefix\")\n            model_kwargs = {input_.name: getattr(self, f\"{prefix}{input_.name}\") for input_ in inputs}\n\n            return component.set(**model_kwargs)\n        return component\n\n    def delete_fields(self, build_config: dotdict, fields: dict | list[str]) -> None:\n        \"\"\"Delete specified fields from build_config.\"\"\"\n        for field in fields:\n            build_config.pop(field, None)\n\n    def update_input_types(self, build_config: dotdict) -> dotdict:\n        \"\"\"Update input types for all fields in build_config.\"\"\"\n        for key, value in build_config.items():\n            if isinstance(value, dict):\n                if value.get(\"input_types\") is None:\n                    build_config[key][\"input_types\"] = []\n            elif hasattr(value, \"input_types\") and value.input_types is None:\n                value.input_types = []\n        return build_config\n\n    async def update_build_config(\n        self, build_config: dotdict, field_value: str, field_name: str | None = None\n    ) -> dotdict:\n        # Iterate over all providers in the MODEL_PROVIDERS_DICT\n        # Existing logic for updating build_config\n        if field_name in (\"agent_llm\",):\n            build_config[\"agent_llm\"][\"value\"] = field_value\n            provider_info = MODEL_PROVIDERS_DICT.get(field_value)\n            if provider_info:\n                component_class = provider_info.get(\"component_class\")\n                if component_class and hasattr(component_class, \"update_build_config\"):\n                    # Call the component class's update_build_config method\n                    build_config = await update_component_build_config(\n                        component_class, build_config, field_value, \"model_name\"\n                    )\n\n            provider_configs: dict[str, tuple[dict, list[dict]]] = {\n                provider: (\n                    MODEL_PROVIDERS_DICT[provider][\"fields\"],\n                    [\n                        MODEL_PROVIDERS_DICT[other_provider][\"fields\"]\n                        for other_provider in MODEL_PROVIDERS_DICT\n                        if other_provider != provider\n                    ],\n                )\n                for provider in MODEL_PROVIDERS_DICT\n            }\n            if field_value in provider_configs:\n                fields_to_add, fields_to_delete = provider_configs[field_value]\n\n                # Delete fields from other providers\n                for fields in fields_to_delete:\n                    self.delete_fields(build_config, fields)\n\n                # Add provider-specific fields\n                if field_value == \"OpenAI\" and not any(field in build_config for field in fields_to_add):\n                    build_config.update(fields_to_add)\n                else:\n                    build_config.update(fields_to_add)\n                # Reset input types for agent_llm\n                build_config[\"agent_llm\"][\"input_types\"] = []\n            elif field_value == \"Custom\":\n                # Delete all provider fields\n                self.delete_fields(build_config, ALL_PROVIDER_FIELDS)\n                # Update with custom component\n                custom_component = DropdownInput(\n                    name=\"agent_llm\",\n                    display_name=\"Language Model\",\n                    options=[*sorted(MODEL_PROVIDERS_DICT.keys()), \"Custom\"],\n                    value=\"Custom\",\n                    real_time_refresh=True,\n                    input_types=[\"LanguageModel\"],\n                )\n                build_config.update({\"agent_llm\": custom_component.to_dict()})\n            # Update input types for all fields\n            build_config = self.update_input_types(build_config)\n\n            # Validate required keys\n            default_keys = [\n                \"code\",\n                \"_type\",\n                \"agent_llm\",\n                \"tools\",\n                \"input_value\",\n                \"add_current_date_tool\",\n                \"system_prompt\",\n                \"agent_description\",\n                \"max_iterations\",\n                \"handle_parsing_errors\",\n                \"verbose\",\n            ]\n            missing_keys = [key for key in default_keys if key not in build_config]\n            if missing_keys:\n                msg = f\"Missing required keys in build_config: {missing_keys}\"\n                raise ValueError(msg)\n        if (\n            isinstance(self.agent_llm, str)\n            and self.agent_llm in MODEL_PROVIDERS_DICT\n            and field_name in MODEL_DYNAMIC_UPDATE_FIELDS\n        ):\n            provider_info = MODEL_PROVIDERS_DICT.get(self.agent_llm)\n            if provider_info:\n                component_class = provider_info.get(\"component_class\")\n                component_class = self.set_component_params(component_class)\n                prefix = provider_info.get(\"prefix\")\n                if component_class and hasattr(component_class, \"update_build_config\"):\n                    # Call each component class's update_build_config method\n                    # remove the prefix from the field_name\n                    if isinstance(field_name, str) and isinstance(prefix, str):\n                        field_name = field_name.replace(prefix, \"\")\n                    build_config = await update_component_build_config(\n                        component_class, build_config, field_value, \"model_name\"\n                    )\n        return dotdict({k: v.to_dict() if hasattr(v, \"to_dict\") else v for k, v in build_config.items()})\n\n    async def to_toolkit(self) -> list[Tool]:\n        component_toolkit = _get_component_toolkit()\n        tools_names = self._build_tools_names()\n        agent_description = self.get_tool_description()\n        # TODO: Agent Description Depreciated Feature to be removed\n        description = f\"{agent_description}{tools_names}\"\n        tools = component_toolkit(component=self).get_tools(\n            tool_name=self.get_tool_name(), tool_description=description, callbacks=self.get_langchain_callbacks()\n        )\n        if hasattr(self, \"tools_metadata\"):\n            tools = component_toolkit(component=self, metadata=self.tools_metadata).update_tools_metadata(tools=tools)\n        return tools\n",
                 "fileTypes": [],
                 "file_path": "",
                 "password": false,
@@ -861,24 +860,6 @@
                 "advanced": true,
                 "dynamic": false,
                 "info": "The maximum number of attempts the agent can make to complete its task before it stops.",
-                "title_case": false,
-                "type": "int",
-                "_input_type": "IntInput"
-              },
-              "max_retries": {
-                "tool_mode": false,
-                "trace_as_metadata": true,
-                "list": false,
-                "list_add_label": "Add More",
-                "required": false,
-                "placeholder": "",
-                "show": true,
-                "name": "max_retries",
-                "value": 5,
-                "display_name": "Max Retries",
-                "advanced": true,
-                "dynamic": false,
-                "info": "The maximum number of retries to make when generating.",
                 "title_case": false,
                 "type": "int",
                 "_input_type": "IntInput"
@@ -1179,24 +1160,6 @@
                 "type": "str",
                 "_input_type": "MultilineInput"
               },
-              "timeout": {
-                "tool_mode": false,
-                "trace_as_metadata": true,
-                "list": false,
-                "list_add_label": "Add More",
-                "required": false,
-                "placeholder": "",
-                "show": true,
-                "name": "timeout",
-                "value": 700,
-                "display_name": "Timeout",
-                "advanced": true,
-                "dynamic": false,
-                "info": "The timeout for requests to OpenAI completion API.",
-                "title_case": false,
-                "type": "int",
-                "_input_type": "IntInput"
-              },
               "verbose": {
                 "tool_mode": false,
                 "trace_as_metadata": true,
@@ -1256,8 +1219,6 @@
               "api_key",
               "temperature",
               "seed",
-              "max_retries",
-              "timeout",
               "system_prompt",
               "tools",
               "input_value",
@@ -1279,10 +1240,12 @@
             "edited": false,
             "metadata": {},
             "tool_mode": false,
-            "lf_version": "1.1.4.post1"
+            "lf_version": "1.1.4"
           },
           "type": "Agent",
-          "id": "Agent-ONSLx"
+          "id": "Agent-Gg5G7",
+          "description": "Define the agent's instructions, then enter a task to complete using tools.",
+          "display_name": "Agent"
         },
         "selected": false,
         "width": 320,
@@ -1298,7 +1261,7 @@
         }
       },
       {
-        "id": "AstraDB-nPsZi",
+        "id": "AstraDB-e84W9",
         "type": "genericNode",
         "position": {
           "x": 804.6418105335608,
@@ -1318,7 +1281,7 @@
                 "name": "embedding_model",
                 "value": "",
                 "display_name": "Embedding Model",
-                "advanced": false,
+                "advanced": true,
                 "input_types": [
                   "Embeddings"
                 ],
@@ -1372,15 +1335,22 @@
               "api_endpoint": {
                 "tool_mode": false,
                 "trace_as_metadata": true,
-                "options": [],
-                "options_metadata": [],
+                "options": [
+                  "wikipedia"
+                ],
+                "options_metadata": [
+                  {
+                    "collections": 6,
+                    "api_endpoint": "https://5762f596-3f12-4c00-8df9-7fea96eb2564-us-east-2.apps.astra.datastax.com"
+                  }
+                ],
                 "combobox": true,
                 "dialog_inputs": {},
                 "required": true,
                 "placeholder": "",
                 "show": true,
-                "name": "api_endpoint",
-                "value": "https://fe5ac1e4-43e0-4cba-aded-3b5db42e3809-us-east-2.apps.astra.datastax.com",
+                "name": "Database",
+                "value": "wikipedia",
                 "display_name": "Database",
                 "advanced": false,
                 "dynamic": false,
@@ -1450,8 +1420,52 @@
               "collection_name": {
                 "tool_mode": false,
                 "trace_as_metadata": true,
-                "options": [],
-                "options_metadata": [],
+                "options": [
+                  "faq",
+                  "jira_data",
+                  "orders",
+                  "products",
+                  "test",
+                  "wiki_data"
+                ],
+                "options_metadata": [
+                  {
+                    "records": 2,
+                    "provider": "nvidia",
+                    "icon": "",
+                    "model": "NV-Embed-QA"
+                  },
+                  {
+                    "records": 23,
+                    "provider": "openai",
+                    "icon": "",
+                    "model": "text-embedding-3-small"
+                  },
+                  {
+                    "records": 5,
+                    "provider": null,
+                    "icon": "",
+                    "model": null
+                  },
+                  {
+                    "records": 8,
+                    "provider": null,
+                    "icon": "",
+                    "model": null
+                  },
+                  {
+                    "records": 0,
+                    "provider": null,
+                    "icon": "",
+                    "model": null
+                  },
+                  {
+                    "records": 820,
+                    "provider": "openai",
+                    "icon": "",
+                    "model": "text-embedding-3-small"
+                  }
+                ],
                 "combobox": true,
                 "dialog_inputs": {},
                 "required": true,
@@ -1499,7 +1513,7 @@
                 "placeholder": "",
                 "show": true,
                 "name": "d_api_endpoint",
-                "value": "",
+                "value": "https://5762f596-3f12-4c00-8df9-7fea96eb2564-us-east-2.apps.astra.datastax.com",
                 "display_name": "Database API Endpoint",
                 "advanced": true,
                 "dynamic": false,
@@ -1810,7 +1824,7 @@
               "Data",
               "DataFrame"
             ],
-            "display_name": "Astra DB",
+            "display_name": "FAQ",
             "documentation": "https://docs.datastax.com/en/langflow/astra-components.html",
             "minimized": false,
             "custom_fields": {},
@@ -1861,10 +1875,10 @@
             "edited": false,
             "metadata": {},
             "tool_mode": true,
-            "lf_version": "1.1.4.post1"
+            "lf_version": "1.1.4"
           },
           "type": "AstraDB",
-          "id": "AstraDB-nPsZi"
+          "id": "AstraDB-e84W9"
         },
         "selected": false,
         "width": 320,
@@ -1880,7 +1894,7 @@
         }
       },
       {
-        "id": "File-skucH",
+        "id": "File-B2pcQ",
         "type": "genericNode",
         "position": {
           "x": 432.76766417465217,
@@ -1913,7 +1927,7 @@
               },
               "path": {
                 "trace_as_metadata": true,
-                "file_path": "",
+                "file_path": "7ee7ebaa-3195-423a-a100-c117686202a1/2025-03-06_13-31-14_Company_FAQ.pdf",
                 "fileTypes": [
                   "txt",
                   "md",
@@ -2127,10 +2141,11 @@
             "legacy": false,
             "edited": false,
             "metadata": {},
-            "tool_mode": false
+            "tool_mode": false,
+            "lf_version": "1.1.4"
           },
           "type": "File",
-          "id": "File-skucH"
+          "id": "File-B2pcQ"
         },
         "selected": false,
         "width": 320,
@@ -2146,7 +2161,7 @@
         }
       },
       {
-        "id": "SplitText-nM6Uj",
+        "id": "SplitText-FxUja",
         "type": "genericNode",
         "position": {
           "x": 815.3269318302421,
@@ -2310,10 +2325,11 @@
             "legacy": false,
             "edited": false,
             "metadata": {},
-            "tool_mode": false
+            "tool_mode": false,
+            "lf_version": "1.1.4"
           },
           "type": "SplitText",
-          "id": "SplitText-nM6Uj"
+          "id": "SplitText-FxUja"
         },
         "selected": false,
         "width": 320,
@@ -2329,7 +2345,7 @@
         }
       },
       {
-        "id": "AstraDBToolComponent-e1ASm",
+        "id": "AstraDBToolComponent-zl7tZ",
         "type": "genericNode",
         "position": {
           "x": 375.80917436802156,
@@ -2340,12 +2356,12 @@
             "template": {
               "_type": "Component",
               "api_endpoint": {
-                "load_from_db": false,
+                "load_from_db": true,
                 "required": true,
                 "placeholder": "",
                 "show": true,
                 "name": "api_endpoint",
-                "value": "https://fe5ac1e4-43e0-4cba-aded-3b5db42e3809-us-east-2.apps.astra.datastax.com",
+                "value": "ASTRA_DB_API_ENDPOINT",
                 "display_name": "API Endpoint",
                 "advanced": false,
                 "input_types": [
@@ -2627,10 +2643,10 @@
             "edited": false,
             "metadata": {},
             "tool_mode": false,
-            "lf_version": "1.1.4.post1"
+            "lf_version": "1.1.4"
           },
           "type": "AstraDBToolComponent",
-          "id": "AstraDBToolComponent-e1ASm"
+          "id": "AstraDBToolComponent-zl7tZ"
         },
         "selected": false,
         "width": 320,
@@ -2646,7 +2662,7 @@
         }
       },
       {
-        "id": "AstraDBToolComponent-UCHRR",
+        "id": "AstraDBToolComponent-sqw7f",
         "type": "genericNode",
         "position": {
           "x": 363.70394659341605,
@@ -2657,12 +2673,12 @@
             "template": {
               "_type": "Component",
               "api_endpoint": {
-                "load_from_db": false,
+                "load_from_db": true,
                 "required": true,
                 "placeholder": "",
                 "show": true,
                 "name": "api_endpoint",
-                "value": "https://fe5ac1e4-43e0-4cba-aded-3b5db42e3809-us-east-2.apps.astra.datastax.com",
+                "value": "ASTRA_DB_API_ENDPOINT",
                 "display_name": "API Endpoint",
                 "advanced": false,
                 "input_types": [
@@ -2944,10 +2960,10 @@
             "edited": false,
             "metadata": {},
             "tool_mode": false,
-            "lf_version": "1.1.4.post1"
+            "lf_version": "1.1.4"
           },
           "type": "AstraDBToolComponent",
-          "id": "AstraDBToolComponent-UCHRR"
+          "id": "AstraDBToolComponent-sqw7f"
         },
         "selected": false,
         "width": 320,
@@ -2963,7 +2979,7 @@
         }
       },
       {
-        "id": "Agent-kUNrV",
+        "id": "Agent-PPYh1",
         "type": "genericNode",
         "position": {
           "x": 806.9175393995828,
@@ -3066,7 +3082,6 @@
                   "Groq",
                   "NVIDIA",
                   "OpenAI",
-                  "SambaNova",
                   "Custom"
                 ],
                 "options_metadata": [],
@@ -3113,7 +3128,7 @@
                 "list": false,
                 "show": true,
                 "multiline": true,
-                "value": "from langchain_core.tools import StructuredTool\n\nfrom langflow.base.agents.agent import LCToolsAgentComponent\nfrom langflow.base.agents.events import ExceptionWithMessageError\nfrom langflow.base.models.model_input_constants import (\n    ALL_PROVIDER_FIELDS,\n    MODEL_DYNAMIC_UPDATE_FIELDS,\n    MODEL_PROVIDERS_DICT,\n)\nfrom langflow.base.models.model_utils import get_model_name\nfrom langflow.components.helpers import CurrentDateComponent\nfrom langflow.components.helpers.memory import MemoryComponent\nfrom langflow.components.langchain_utilities.tool_calling import ToolCallingAgentComponent\nfrom langflow.custom.custom_component.component import _get_component_toolkit\nfrom langflow.custom.utils import update_component_build_config\nfrom langflow.field_typing import Tool\nfrom langflow.io import BoolInput, DropdownInput, MultilineInput, Output\nfrom langflow.logging import logger\nfrom langflow.schema.dotdict import dotdict\nfrom langflow.schema.message import Message\n\n\ndef set_advanced_true(component_input):\n    component_input.advanced = True\n    return component_input\n\n\nclass AgentComponent(ToolCallingAgentComponent):\n    display_name: str = \"Agent\"\n    description: str = \"Define the agent's instructions, then enter a task to complete using tools.\"\n    icon = \"bot\"\n    beta = False\n    name = \"Agent\"\n\n    memory_inputs = [set_advanced_true(component_input) for component_input in MemoryComponent().inputs]\n\n    inputs = [\n        DropdownInput(\n            name=\"agent_llm\",\n            display_name=\"Model Provider\",\n            info=\"The provider of the language model that the agent will use to generate responses.\",\n            options=[*sorted(MODEL_PROVIDERS_DICT.keys()), \"Custom\"],\n            value=\"OpenAI\",\n            real_time_refresh=True,\n            input_types=[],\n        ),\n        *MODEL_PROVIDERS_DICT[\"OpenAI\"][\"inputs\"],\n        MultilineInput(\n            name=\"system_prompt\",\n            display_name=\"Agent Instructions\",\n            info=\"System Prompt: Initial instructions and context provided to guide the agent's behavior.\",\n            value=\"You are a helpful assistant that can use tools to answer questions and perform tasks.\",\n            advanced=False,\n        ),\n        *LCToolsAgentComponent._base_inputs,\n        *memory_inputs,\n        BoolInput(\n            name=\"add_current_date_tool\",\n            display_name=\"Current Date\",\n            advanced=True,\n            info=\"If true, will add a tool to the agent that returns the current date.\",\n            value=True,\n        ),\n    ]\n    outputs = [Output(name=\"response\", display_name=\"Response\", method=\"message_response\")]\n\n    async def message_response(self) -> Message:\n        try:\n            # Get LLM model and validate\n            llm_model, display_name = self.get_llm()\n            if llm_model is None:\n                msg = \"No language model selected. Please choose a model to proceed.\"\n                raise ValueError(msg)\n            self.model_name = get_model_name(llm_model, display_name=display_name)\n\n            # Get memory data\n            self.chat_history = await self.get_memory_data()\n\n            # Add current date tool if enabled\n            if self.add_current_date_tool:\n                if not isinstance(self.tools, list):  # type: ignore[has-type]\n                    self.tools = []\n                current_date_tool = (await CurrentDateComponent(**self.get_base_args()).to_toolkit()).pop(0)\n                if not isinstance(current_date_tool, StructuredTool):\n                    msg = \"CurrentDateComponent must be converted to a StructuredTool\"\n                    raise TypeError(msg)\n                self.tools.append(current_date_tool)\n\n            # Validate tools\n            if not self.tools:\n                msg = \"Tools are required to run the agent. Please add at least one tool.\"\n                raise ValueError(msg)\n\n            # Set up and run agent\n            self.set(\n                llm=llm_model,\n                tools=self.tools,\n                chat_history=self.chat_history,\n                input_value=self.input_value,\n                system_prompt=self.system_prompt,\n            )\n            agent = self.create_agent_runnable()\n            return await self.run_agent(agent)\n\n        except (ValueError, TypeError, KeyError) as e:\n            logger.error(f\"{type(e).__name__}: {e!s}\")\n            raise\n        except ExceptionWithMessageError as e:\n            logger.error(f\"ExceptionWithMessageError occurred: {e}\")\n            raise\n        except Exception as e:\n            logger.error(f\"Unexpected error: {e!s}\")\n            raise\n\n    async def get_memory_data(self):\n        memory_kwargs = {\n            component_input.name: getattr(self, f\"{component_input.name}\") for component_input in self.memory_inputs\n        }\n        # filter out empty values\n        memory_kwargs = {k: v for k, v in memory_kwargs.items() if v}\n\n        return await MemoryComponent(**self.get_base_args()).set(**memory_kwargs).retrieve_messages()\n\n    def get_llm(self):\n        if not isinstance(self.agent_llm, str):\n            return self.agent_llm, None\n\n        try:\n            provider_info = MODEL_PROVIDERS_DICT.get(self.agent_llm)\n            if not provider_info:\n                msg = f\"Invalid model provider: {self.agent_llm}\"\n                raise ValueError(msg)\n\n            component_class = provider_info.get(\"component_class\")\n            display_name = component_class.display_name\n            inputs = provider_info.get(\"inputs\")\n            prefix = provider_info.get(\"prefix\", \"\")\n\n            return self._build_llm_model(component_class, inputs, prefix), display_name\n\n        except Exception as e:\n            logger.error(f\"Error building {self.agent_llm} language model: {e!s}\")\n            msg = f\"Failed to initialize language model: {e!s}\"\n            raise ValueError(msg) from e\n\n    def _build_llm_model(self, component, inputs, prefix=\"\"):\n        model_kwargs = {input_.name: getattr(self, f\"{prefix}{input_.name}\") for input_ in inputs}\n        return component.set(**model_kwargs).build_model()\n\n    def set_component_params(self, component):\n        provider_info = MODEL_PROVIDERS_DICT.get(self.agent_llm)\n        if provider_info:\n            inputs = provider_info.get(\"inputs\")\n            prefix = provider_info.get(\"prefix\")\n            model_kwargs = {input_.name: getattr(self, f\"{prefix}{input_.name}\") for input_ in inputs}\n\n            return component.set(**model_kwargs)\n        return component\n\n    def delete_fields(self, build_config: dotdict, fields: dict | list[str]) -> None:\n        \"\"\"Delete specified fields from build_config.\"\"\"\n        for field in fields:\n            build_config.pop(field, None)\n\n    def update_input_types(self, build_config: dotdict) -> dotdict:\n        \"\"\"Update input types for all fields in build_config.\"\"\"\n        for key, value in build_config.items():\n            if isinstance(value, dict):\n                if value.get(\"input_types\") is None:\n                    build_config[key][\"input_types\"] = []\n            elif hasattr(value, \"input_types\") and value.input_types is None:\n                value.input_types = []\n        return build_config\n\n    async def update_build_config(\n        self, build_config: dotdict, field_value: str, field_name: str | None = None\n    ) -> dotdict:\n        # Iterate over all providers in the MODEL_PROVIDERS_DICT\n        # Existing logic for updating build_config\n        if field_name in (\"agent_llm\",):\n            build_config[\"agent_llm\"][\"value\"] = field_value\n            provider_info = MODEL_PROVIDERS_DICT.get(field_value)\n            if provider_info:\n                component_class = provider_info.get(\"component_class\")\n                if component_class and hasattr(component_class, \"update_build_config\"):\n                    # Call the component class's update_build_config method\n                    build_config = await update_component_build_config(\n                        component_class, build_config, field_value, \"model_name\"\n                    )\n\n            provider_configs: dict[str, tuple[dict, list[dict]]] = {\n                provider: (\n                    MODEL_PROVIDERS_DICT[provider][\"fields\"],\n                    [\n                        MODEL_PROVIDERS_DICT[other_provider][\"fields\"]\n                        for other_provider in MODEL_PROVIDERS_DICT\n                        if other_provider != provider\n                    ],\n                )\n                for provider in MODEL_PROVIDERS_DICT\n            }\n            if field_value in provider_configs:\n                fields_to_add, fields_to_delete = provider_configs[field_value]\n\n                # Delete fields from other providers\n                for fields in fields_to_delete:\n                    self.delete_fields(build_config, fields)\n\n                # Add provider-specific fields\n                if field_value == \"OpenAI\" and not any(field in build_config for field in fields_to_add):\n                    build_config.update(fields_to_add)\n                else:\n                    build_config.update(fields_to_add)\n                # Reset input types for agent_llm\n                build_config[\"agent_llm\"][\"input_types\"] = []\n            elif field_value == \"Custom\":\n                # Delete all provider fields\n                self.delete_fields(build_config, ALL_PROVIDER_FIELDS)\n                # Update with custom component\n                custom_component = DropdownInput(\n                    name=\"agent_llm\",\n                    display_name=\"Language Model\",\n                    options=[*sorted(MODEL_PROVIDERS_DICT.keys()), \"Custom\"],\n                    value=\"Custom\",\n                    real_time_refresh=True,\n                    input_types=[\"LanguageModel\"],\n                )\n                build_config.update({\"agent_llm\": custom_component.to_dict()})\n            # Update input types for all fields\n            build_config = self.update_input_types(build_config)\n\n            # Validate required keys\n            default_keys = [\n                \"code\",\n                \"_type\",\n                \"agent_llm\",\n                \"tools\",\n                \"input_value\",\n                \"add_current_date_tool\",\n                \"system_prompt\",\n                \"agent_description\",\n                \"max_iterations\",\n                \"handle_parsing_errors\",\n                \"verbose\",\n            ]\n            missing_keys = [key for key in default_keys if key not in build_config]\n            if missing_keys:\n                msg = f\"Missing required keys in build_config: {missing_keys}\"\n                raise ValueError(msg)\n        if (\n            isinstance(self.agent_llm, str)\n            and self.agent_llm in MODEL_PROVIDERS_DICT\n            and field_name in MODEL_DYNAMIC_UPDATE_FIELDS\n        ):\n            provider_info = MODEL_PROVIDERS_DICT.get(self.agent_llm)\n            if provider_info:\n                component_class = provider_info.get(\"component_class\")\n                component_class = self.set_component_params(component_class)\n                prefix = provider_info.get(\"prefix\")\n                if component_class and hasattr(component_class, \"update_build_config\"):\n                    # Call each component class's update_build_config method\n                    # remove the prefix from the field_name\n                    if isinstance(field_name, str) and isinstance(prefix, str):\n                        field_name = field_name.replace(prefix, \"\")\n                    build_config = await update_component_build_config(\n                        component_class, build_config, field_value, \"model_name\"\n                    )\n        return dotdict({k: v.to_dict() if hasattr(v, \"to_dict\") else v for k, v in build_config.items()})\n\n    async def to_toolkit(self) -> list[Tool]:\n        component_toolkit = _get_component_toolkit()\n        tools_names = self._build_tools_names()\n        agent_description = self.get_tool_description()\n        # TODO: Agent Description Depreciated Feature to be removed\n        description = f\"{agent_description}{tools_names}\"\n        tools = component_toolkit(component=self).get_tools(\n            tool_name=self.get_tool_name(), tool_description=description, callbacks=self.get_langchain_callbacks()\n        )\n        if hasattr(self, \"tools_metadata\"):\n            tools = component_toolkit(component=self, metadata=self.tools_metadata).update_tools_metadata(tools=tools)\n        return tools\n",
+                "value": "from langchain_core.tools import StructuredTool\n\nfrom langflow.base.agents.agent import LCToolsAgentComponent\nfrom langflow.base.models.model_input_constants import (\n    ALL_PROVIDER_FIELDS,\n    MODEL_DYNAMIC_UPDATE_FIELDS,\n    MODEL_PROVIDERS_DICT,\n)\nfrom langflow.base.models.model_utils import get_model_name\nfrom langflow.components.helpers import CurrentDateComponent\nfrom langflow.components.helpers.memory import MemoryComponent\nfrom langflow.components.langchain_utilities.tool_calling import ToolCallingAgentComponent\nfrom langflow.custom.custom_component.component import _get_component_toolkit\nfrom langflow.custom.utils import update_component_build_config\nfrom langflow.field_typing import Tool\nfrom langflow.io import BoolInput, DropdownInput, MultilineInput, Output\nfrom langflow.logging import logger\nfrom langflow.schema.dotdict import dotdict\nfrom langflow.schema.message import Message\n\n\ndef set_advanced_true(component_input):\n    component_input.advanced = True\n    return component_input\n\n\nclass AgentComponent(ToolCallingAgentComponent):\n    display_name: str = \"Agent\"\n    description: str = \"Define the agent's instructions, then enter a task to complete using tools.\"\n    icon = \"bot\"\n    beta = False\n    name = \"Agent\"\n\n    memory_inputs = [set_advanced_true(component_input) for component_input in MemoryComponent().inputs]\n\n    inputs = [\n        DropdownInput(\n            name=\"agent_llm\",\n            display_name=\"Model Provider\",\n            info=\"The provider of the language model that the agent will use to generate responses.\",\n            options=[*sorted(MODEL_PROVIDERS_DICT.keys()), \"Custom\"],\n            value=\"OpenAI\",\n            real_time_refresh=True,\n            input_types=[],\n        ),\n        *MODEL_PROVIDERS_DICT[\"OpenAI\"][\"inputs\"],\n        MultilineInput(\n            name=\"system_prompt\",\n            display_name=\"Agent Instructions\",\n            info=\"System Prompt: Initial instructions and context provided to guide the agent's behavior.\",\n            value=\"You are a helpful assistant that can use tools to answer questions and perform tasks.\",\n            advanced=False,\n        ),\n        *LCToolsAgentComponent._base_inputs,\n        *memory_inputs,\n        BoolInput(\n            name=\"add_current_date_tool\",\n            display_name=\"Current Date\",\n            advanced=True,\n            info=\"If true, will add a tool to the agent that returns the current date.\",\n            value=True,\n        ),\n    ]\n    outputs = [Output(name=\"response\", display_name=\"Response\", method=\"message_response\")]\n\n    async def message_response(self) -> Message:\n        try:\n            llm_model, display_name = self.get_llm()\n            if llm_model is None:\n                msg = \"No language model selected\"\n                raise ValueError(msg)\n            self.model_name = get_model_name(llm_model, display_name=display_name)\n        except Exception as e:\n            # Log the error for debugging purposes\n            logger.error(f\"Error retrieving language model: {e}\")\n            raise\n\n        try:\n            self.chat_history = await self.get_memory_data()\n        except Exception as e:\n            logger.error(f\"Error retrieving chat history: {e}\")\n            raise\n\n        if self.add_current_date_tool:\n            try:\n                if not isinstance(self.tools, list):  # type: ignore[has-type]\n                    self.tools = []\n                # Convert CurrentDateComponent to a StructuredTool\n                current_date_tool = (await CurrentDateComponent(**self.get_base_args()).to_toolkit()).pop(0)\n                if isinstance(current_date_tool, StructuredTool):\n                    self.tools.append(current_date_tool)\n                else:\n                    msg = \"CurrentDateComponent must be converted to a StructuredTool\"\n                    raise TypeError(msg)\n            except Exception as e:\n                logger.error(f\"Error adding current date tool: {e}\")\n                raise\n\n        if not self.tools:\n            msg = \"Tools are required to run the agent.\"\n            logger.error(msg)\n            raise ValueError(msg)\n\n        try:\n            self.set(\n                llm=llm_model,\n                tools=self.tools,\n                chat_history=self.chat_history,\n                input_value=self.input_value,\n                system_prompt=self.system_prompt,\n            )\n            agent = self.create_agent_runnable()\n        except Exception as e:\n            logger.error(f\"Error setting up the agent: {e}\")\n            raise\n\n        return await self.run_agent(agent)\n\n    async def get_memory_data(self):\n        memory_kwargs = {\n            component_input.name: getattr(self, f\"{component_input.name}\") for component_input in self.memory_inputs\n        }\n        # filter out empty values\n        memory_kwargs = {k: v for k, v in memory_kwargs.items() if v}\n\n        return await MemoryComponent(**self.get_base_args()).set(**memory_kwargs).retrieve_messages()\n\n    def get_llm(self):\n        if isinstance(self.agent_llm, str):\n            try:\n                provider_info = MODEL_PROVIDERS_DICT.get(self.agent_llm)\n                if provider_info:\n                    component_class = provider_info.get(\"component_class\")\n                    display_name = component_class.display_name\n                    inputs = provider_info.get(\"inputs\")\n                    prefix = provider_info.get(\"prefix\", \"\")\n                    return (\n                        self._build_llm_model(component_class, inputs, prefix),\n                        display_name,\n                    )\n            except Exception as e:\n                msg = f\"Error building {self.agent_llm} language model\"\n                raise ValueError(msg) from e\n        return self.agent_llm, None\n\n    def _build_llm_model(self, component, inputs, prefix=\"\"):\n        model_kwargs = {input_.name: getattr(self, f\"{prefix}{input_.name}\") for input_ in inputs}\n        return component.set(**model_kwargs).build_model()\n\n    def set_component_params(self, component):\n        provider_info = MODEL_PROVIDERS_DICT.get(self.agent_llm)\n        if provider_info:\n            inputs = provider_info.get(\"inputs\")\n            prefix = provider_info.get(\"prefix\")\n            model_kwargs = {input_.name: getattr(self, f\"{prefix}{input_.name}\") for input_ in inputs}\n\n            return component.set(**model_kwargs)\n        return component\n\n    def delete_fields(self, build_config: dotdict, fields: dict | list[str]) -> None:\n        \"\"\"Delete specified fields from build_config.\"\"\"\n        for field in fields:\n            build_config.pop(field, None)\n\n    def update_input_types(self, build_config: dotdict) -> dotdict:\n        \"\"\"Update input types for all fields in build_config.\"\"\"\n        for key, value in build_config.items():\n            if isinstance(value, dict):\n                if value.get(\"input_types\") is None:\n                    build_config[key][\"input_types\"] = []\n            elif hasattr(value, \"input_types\") and value.input_types is None:\n                value.input_types = []\n        return build_config\n\n    async def update_build_config(\n        self, build_config: dotdict, field_value: str, field_name: str | None = None\n    ) -> dotdict:\n        # Iterate over all providers in the MODEL_PROVIDERS_DICT\n        # Existing logic for updating build_config\n        if field_name in (\"agent_llm\",):\n            build_config[\"agent_llm\"][\"value\"] = field_value\n            provider_info = MODEL_PROVIDERS_DICT.get(field_value)\n            if provider_info:\n                component_class = provider_info.get(\"component_class\")\n                if component_class and hasattr(component_class, \"update_build_config\"):\n                    # Call the component class's update_build_config method\n                    build_config = await update_component_build_config(\n                        component_class, build_config, field_value, \"model_name\"\n                    )\n\n            provider_configs: dict[str, tuple[dict, list[dict]]] = {\n                provider: (\n                    MODEL_PROVIDERS_DICT[provider][\"fields\"],\n                    [\n                        MODEL_PROVIDERS_DICT[other_provider][\"fields\"]\n                        for other_provider in MODEL_PROVIDERS_DICT\n                        if other_provider != provider\n                    ],\n                )\n                for provider in MODEL_PROVIDERS_DICT\n            }\n            if field_value in provider_configs:\n                fields_to_add, fields_to_delete = provider_configs[field_value]\n\n                # Delete fields from other providers\n                for fields in fields_to_delete:\n                    self.delete_fields(build_config, fields)\n\n                # Add provider-specific fields\n                if field_value == \"OpenAI\" and not any(field in build_config for field in fields_to_add):\n                    build_config.update(fields_to_add)\n                else:\n                    build_config.update(fields_to_add)\n                # Reset input types for agent_llm\n                build_config[\"agent_llm\"][\"input_types\"] = []\n            elif field_value == \"Custom\":\n                # Delete all provider fields\n                self.delete_fields(build_config, ALL_PROVIDER_FIELDS)\n                # Update with custom component\n                custom_component = DropdownInput(\n                    name=\"agent_llm\",\n                    display_name=\"Language Model\",\n                    options=[*sorted(MODEL_PROVIDERS_DICT.keys()), \"Custom\"],\n                    value=\"Custom\",\n                    real_time_refresh=True,\n                    input_types=[\"LanguageModel\"],\n                )\n                build_config.update({\"agent_llm\": custom_component.to_dict()})\n            # Update input types for all fields\n            build_config = self.update_input_types(build_config)\n\n            # Validate required keys\n            default_keys = [\n                \"code\",\n                \"_type\",\n                \"agent_llm\",\n                \"tools\",\n                \"input_value\",\n                \"add_current_date_tool\",\n                \"system_prompt\",\n                \"agent_description\",\n                \"max_iterations\",\n                \"handle_parsing_errors\",\n                \"verbose\",\n            ]\n            missing_keys = [key for key in default_keys if key not in build_config]\n            if missing_keys:\n                msg = f\"Missing required keys in build_config: {missing_keys}\"\n                raise ValueError(msg)\n        if (\n            isinstance(self.agent_llm, str)\n            and self.agent_llm in MODEL_PROVIDERS_DICT\n            and field_name in MODEL_DYNAMIC_UPDATE_FIELDS\n        ):\n            provider_info = MODEL_PROVIDERS_DICT.get(self.agent_llm)\n            if provider_info:\n                component_class = provider_info.get(\"component_class\")\n                component_class = self.set_component_params(component_class)\n                prefix = provider_info.get(\"prefix\")\n                if component_class and hasattr(component_class, \"update_build_config\"):\n                    # Call each component class's update_build_config method\n                    # remove the prefix from the field_name\n                    if isinstance(field_name, str) and isinstance(prefix, str):\n                        field_name = field_name.replace(prefix, \"\")\n                    build_config = await update_component_build_config(\n                        component_class, build_config, field_value, \"model_name\"\n                    )\n        return dotdict({k: v.to_dict() if hasattr(v, \"to_dict\") else v for k, v in build_config.items()})\n\n    async def to_toolkit(self) -> list[Tool]:\n        component_toolkit = _get_component_toolkit()\n        tools_names = self._build_tools_names()\n        agent_description = self.get_tool_description()\n        # TODO: Agent Description Depreciated Feature to be removed\n        description = f\"{agent_description}{tools_names}\"\n        tools = component_toolkit(component=self).get_tools(\n            tool_name=self.get_tool_name(), tool_description=description, callbacks=self.get_langchain_callbacks()\n        )\n        if hasattr(self, \"tools_metadata\"):\n            tools = component_toolkit(component=self, metadata=self.tools_metadata).update_tools_metadata(tools=tools)\n        return tools\n",
                 "fileTypes": [],
                 "file_path": "",
                 "password": false,
@@ -3197,24 +3212,6 @@
                 "advanced": true,
                 "dynamic": false,
                 "info": "The maximum number of attempts the agent can make to complete its task before it stops.",
-                "title_case": false,
-                "type": "int",
-                "_input_type": "IntInput"
-              },
-              "max_retries": {
-                "tool_mode": false,
-                "trace_as_metadata": true,
-                "list": false,
-                "list_add_label": "Add More",
-                "required": false,
-                "placeholder": "",
-                "show": true,
-                "name": "max_retries",
-                "value": 5,
-                "display_name": "Max Retries",
-                "advanced": true,
-                "dynamic": false,
-                "info": "The maximum number of retries to make when generating.",
                 "title_case": false,
                 "type": "int",
                 "_input_type": "IntInput"
@@ -3515,24 +3512,6 @@
                 "type": "str",
                 "_input_type": "MultilineInput"
               },
-              "timeout": {
-                "tool_mode": false,
-                "trace_as_metadata": true,
-                "list": false,
-                "list_add_label": "Add More",
-                "required": false,
-                "placeholder": "",
-                "show": true,
-                "name": "timeout",
-                "value": 700,
-                "display_name": "Timeout",
-                "advanced": true,
-                "dynamic": false,
-                "info": "The timeout for requests to OpenAI completion API.",
-                "title_case": false,
-                "type": "int",
-                "_input_type": "IntInput"
-              },
               "verbose": {
                 "tool_mode": false,
                 "trace_as_metadata": true,
@@ -3677,8 +3656,6 @@
               "api_key",
               "temperature",
               "seed",
-              "max_retries",
-              "timeout",
               "system_prompt",
               "tools",
               "input_value",
@@ -3700,10 +3677,12 @@
             "edited": false,
             "metadata": {},
             "tool_mode": true,
-            "lf_version": "1.1.4.post1"
+            "lf_version": "1.1.4"
           },
           "type": "Agent",
-          "id": "Agent-kUNrV"
+          "id": "Agent-PPYh1",
+          "description": "Define the agent's instructions, then enter a task to complete using tools.",
+          "display_name": "Agent"
         },
         "selected": false,
         "width": 320,
@@ -3719,7 +3698,7 @@
         }
       },
       {
-        "id": "note-kP20K",
+        "id": "note-wemfe",
         "type": "noteNode",
         "position": {
           "x": -55.00260546855634,
@@ -3735,7 +3714,7 @@
             }
           },
           "type": "note",
-          "id": "note-kP20K"
+          "id": "note-wemfe"
         },
         "width": 324,
         "height": 324,
@@ -3751,7 +3730,7 @@
         }
       },
       {
-        "id": "note-7Zi8X",
+        "id": "note-pvg1F",
         "type": "noteNode",
         "position": {
           "x": -38.64895860626879,
@@ -3765,7 +3744,7 @@
             "template": {}
           },
           "type": "note",
-          "id": "note-7Zi8X"
+          "id": "note-pvg1F"
         },
         "width": 324,
         "height": 324,
@@ -3781,7 +3760,7 @@
         }
       },
       {
-        "id": "AstraDB-dl361",
+        "id": "AstraDB-0S7rw",
         "type": "genericNode",
         "position": {
           "x": 1220.754295998037,
@@ -3856,27 +3835,12 @@
                 "tool_mode": false,
                 "trace_as_metadata": true,
                 "options": [
-                  "demo",
-                  "wikipedia",
-                  "customer-support",
-                  "workshop"
+                  "wikipedia"
                 ],
                 "options_metadata": [
                   {
-                    "collections": 3,
-                    "api_endpoint": "https://a05c6cc8-3e35-4b10-a01b-43d24b561381-eu-west-1.apps.astra.datastax.com"
-                  },
-                  {
                     "collections": 6,
                     "api_endpoint": "https://5762f596-3f12-4c00-8df9-7fea96eb2564-us-east-2.apps.astra.datastax.com"
-                  },
-                  {
-                    "collections": 4,
-                    "api_endpoint": "https://fe5ac1e4-43e0-4cba-aded-3b5db42e3809-us-east-2.apps.astra.datastax.com"
-                  },
-                  {
-                    "collections": 1,
-                    "api_endpoint": "https://9734f18b-8958-486d-b4cd-7f4f8f8f5fdb-us-east-2.apps.astra.datastax.com"
                   }
                 ],
                 "combobox": true,
@@ -3885,7 +3849,7 @@
                 "placeholder": "",
                 "show": true,
                 "name": "Database",
-                "value": "",
+                "value": "wikipedia",
                 "display_name": "Database",
                 "advanced": false,
                 "dynamic": false,
@@ -3954,15 +3918,59 @@
               "collection_name": {
                 "tool_mode": false,
                 "trace_as_metadata": true,
-                "options": [],
-                "options_metadata": [],
+                "options": [
+                  "faq",
+                  "jira_data",
+                  "orders",
+                  "products",
+                  "test",
+                  "wiki_data"
+                ],
+                "options_metadata": [
+                  {
+                    "records": 2,
+                    "provider": "nvidia",
+                    "icon": "",
+                    "model": "NV-Embed-QA"
+                  },
+                  {
+                    "records": 23,
+                    "provider": "openai",
+                    "icon": "",
+                    "model": "text-embedding-3-small"
+                  },
+                  {
+                    "records": 5,
+                    "provider": null,
+                    "icon": "",
+                    "model": null
+                  },
+                  {
+                    "records": 8,
+                    "provider": null,
+                    "icon": "",
+                    "model": null
+                  },
+                  {
+                    "records": 0,
+                    "provider": null,
+                    "icon": "",
+                    "model": null
+                  },
+                  {
+                    "records": 820,
+                    "provider": "openai",
+                    "icon": "",
+                    "model": "text-embedding-3-small"
+                  }
+                ],
                 "combobox": true,
                 "dialog_inputs": {},
                 "required": true,
                 "placeholder": "",
                 "show": true,
                 "name": "collection_name",
-                "value": "",
+                "value": "faq",
                 "display_name": "Collection",
                 "advanced": false,
                 "dynamic": false,
@@ -4002,7 +4010,7 @@
                 "placeholder": "",
                 "show": true,
                 "name": "d_api_endpoint",
-                "value": "",
+                "value": "https://5762f596-3f12-4c00-8df9-7fea96eb2564-us-east-2.apps.astra.datastax.com",
                 "display_name": "Database API Endpoint",
                 "advanced": true,
                 "dynamic": false,
@@ -4293,26 +4301,26 @@
           },
           "showNode": true,
           "type": "AstraDB",
-          "id": "AstraDB-dl361"
+          "id": "AstraDB-0S7rw"
         },
         "selected": false,
         "measured": {
           "width": 320,
-          "height": 567
+          "height": 570
         },
         "dragging": false
       }
     ],
     "edges": [
       {
-        "source": "ChatInput-TW4xI",
-        "sourceHandle": "{œdataTypeœ:œChatInputœ,œidœ:œChatInput-TW4xIœ,œnameœ:œmessageœ,œoutput_typesœ:[œMessageœ]}",
-        "target": "Agent-ONSLx",
-        "targetHandle": "{œfieldNameœ:œinput_valueœ,œidœ:œAgent-ONSLxœ,œinputTypesœ:[œMessageœ],œtypeœ:œstrœ}",
+        "source": "ChatInput-GARTT",
+        "sourceHandle": "{œdataTypeœ:œChatInputœ,œidœ:œChatInput-GARTTœ,œnameœ:œmessageœ,œoutput_typesœ:[œMessageœ]}",
+        "target": "Agent-Gg5G7",
+        "targetHandle": "{œfieldNameœ:œinput_valueœ,œidœ:œAgent-Gg5G7œ,œinputTypesœ:[œMessageœ],œtypeœ:œstrœ}",
         "data": {
           "targetHandle": {
             "fieldName": "input_value",
-            "id": "Agent-ONSLx",
+            "id": "Agent-Gg5G7",
             "inputTypes": [
               "Message"
             ],
@@ -4320,26 +4328,26 @@
           },
           "sourceHandle": {
             "dataType": "ChatInput",
-            "id": "ChatInput-TW4xI",
+            "id": "ChatInput-GARTT",
             "name": "message",
             "output_types": [
               "Message"
             ]
           }
         },
-        "id": "reactflow__edge-ChatInput-TW4xI{œdataTypeœ:œChatInputœ,œidœ:œChatInput-TW4xIœ,œnameœ:œmessageœ,œoutput_typesœ:[œMessageœ]}-Agent-ONSLx{œfieldNameœ:œinput_valueœ,œidœ:œAgent-ONSLxœ,œinputTypesœ:[œMessageœ],œtypeœ:œstrœ}",
+        "id": "reactflow__edge-ChatInput-GARTT{œdataTypeœ:œChatInputœ,œidœ:œChatInput-GARTTœ,œnameœ:œmessageœ,œoutput_typesœ:[œMessageœ]}-Agent-Gg5G7{œfieldNameœ:œinput_valueœ,œidœ:œAgent-Gg5G7œ,œinputTypesœ:[œMessageœ],œtypeœ:œstrœ}",
         "animated": false,
         "className": ""
       },
       {
-        "source": "Agent-ONSLx",
-        "sourceHandle": "{œdataTypeœ:œAgentœ,œidœ:œAgent-ONSLxœ,œnameœ:œresponseœ,œoutput_typesœ:[œMessageœ]}",
-        "target": "ChatOutput-jADxU",
-        "targetHandle": "{œfieldNameœ:œinput_valueœ,œidœ:œChatOutput-jADxUœ,œinputTypesœ:[œMessageœ],œtypeœ:œstrœ}",
+        "source": "Agent-Gg5G7",
+        "sourceHandle": "{œdataTypeœ:œAgentœ,œidœ:œAgent-Gg5G7œ,œnameœ:œresponseœ,œoutput_typesœ:[œMessageœ]}",
+        "target": "ChatOutput-PllF6",
+        "targetHandle": "{œfieldNameœ:œinput_valueœ,œidœ:œChatOutput-PllF6œ,œinputTypesœ:[œMessageœ],œtypeœ:œstrœ}",
         "data": {
           "targetHandle": {
             "fieldName": "input_value",
-            "id": "ChatOutput-jADxU",
+            "id": "ChatOutput-PllF6",
             "inputTypes": [
               "Message"
             ],
@@ -4347,26 +4355,26 @@
           },
           "sourceHandle": {
             "dataType": "Agent",
-            "id": "Agent-ONSLx",
+            "id": "Agent-Gg5G7",
             "name": "response",
             "output_types": [
               "Message"
             ]
           }
         },
-        "id": "reactflow__edge-Agent-ONSLx{œdataTypeœ:œAgentœ,œidœ:œAgent-ONSLxœ,œnameœ:œresponseœ,œoutput_typesœ:[œMessageœ]}-ChatOutput-jADxU{œfieldNameœ:œinput_valueœ,œidœ:œChatOutput-jADxUœ,œinputTypesœ:[œMessageœ],œtypeœ:œstrœ}",
+        "id": "reactflow__edge-Agent-Gg5G7{œdataTypeœ:œAgentœ,œidœ:œAgent-Gg5G7œ,œnameœ:œresponseœ,œoutput_typesœ:[œMessageœ]}-ChatOutput-PllF6{œfieldNameœ:œinput_valueœ,œidœ:œChatOutput-PllF6œ,œinputTypesœ:[œMessageœ],œtypeœ:œstrœ}",
         "animated": false,
         "className": ""
       },
       {
-        "source": "File-skucH",
-        "sourceHandle": "{œdataTypeœ:œFileœ,œidœ:œFile-skucHœ,œnameœ:œdataœ,œoutput_typesœ:[œDataœ]}",
-        "target": "SplitText-nM6Uj",
-        "targetHandle": "{œfieldNameœ:œdata_inputsœ,œidœ:œSplitText-nM6Ujœ,œinputTypesœ:[œDataœ],œtypeœ:œotherœ}",
+        "source": "File-B2pcQ",
+        "sourceHandle": "{œdataTypeœ:œFileœ,œidœ:œFile-B2pcQœ,œnameœ:œdataœ,œoutput_typesœ:[œDataœ]}",
+        "target": "SplitText-FxUja",
+        "targetHandle": "{œfieldNameœ:œdata_inputsœ,œidœ:œSplitText-FxUjaœ,œinputTypesœ:[œDataœ],œtypeœ:œotherœ}",
         "data": {
           "targetHandle": {
             "fieldName": "data_inputs",
-            "id": "SplitText-nM6Uj",
+            "id": "SplitText-FxUja",
             "inputTypes": [
               "Data"
             ],
@@ -4374,26 +4382,26 @@
           },
           "sourceHandle": {
             "dataType": "File",
-            "id": "File-skucH",
+            "id": "File-B2pcQ",
             "name": "data",
             "output_types": [
               "Data"
             ]
           }
         },
-        "id": "reactflow__edge-File-skucH{œdataTypeœ:œFileœ,œidœ:œFile-skucHœ,œnameœ:œdataœ,œoutput_typesœ:[œDataœ]}-SplitText-nM6Uj{œfieldNameœ:œdata_inputsœ,œidœ:œSplitText-nM6Ujœ,œinputTypesœ:[œDataœ],œtypeœ:œotherœ}",
+        "id": "reactflow__edge-File-B2pcQ{œdataTypeœ:œFileœ,œidœ:œFile-B2pcQœ,œnameœ:œdataœ,œoutput_typesœ:[œDataœ]}-SplitText-FxUja{œfieldNameœ:œdata_inputsœ,œidœ:œSplitText-FxUjaœ,œinputTypesœ:[œDataœ],œtypeœ:œotherœ}",
         "animated": false,
         "className": ""
       },
       {
-        "source": "AstraDBToolComponent-e1ASm",
-        "sourceHandle": "{œdataTypeœ:œAstraDBToolComponentœ,œidœ:œAstraDBToolComponent-e1ASmœ,œnameœ:œapi_build_toolœ,œoutput_typesœ:[œToolœ]}",
-        "target": "Agent-kUNrV",
-        "targetHandle": "{œfieldNameœ:œtoolsœ,œidœ:œAgent-kUNrVœ,œinputTypesœ:[œToolœ],œtypeœ:œotherœ}",
+        "source": "AstraDBToolComponent-zl7tZ",
+        "sourceHandle": "{œdataTypeœ:œAstraDBToolComponentœ,œidœ:œAstraDBToolComponent-zl7tZœ,œnameœ:œapi_build_toolœ,œoutput_typesœ:[œToolœ]}",
+        "target": "Agent-PPYh1",
+        "targetHandle": "{œfieldNameœ:œtoolsœ,œidœ:œAgent-PPYh1œ,œinputTypesœ:[œToolœ],œtypeœ:œotherœ}",
         "data": {
           "targetHandle": {
             "fieldName": "tools",
-            "id": "Agent-kUNrV",
+            "id": "Agent-PPYh1",
             "inputTypes": [
               "Tool"
             ],
@@ -4401,26 +4409,26 @@
           },
           "sourceHandle": {
             "dataType": "AstraDBToolComponent",
-            "id": "AstraDBToolComponent-e1ASm",
+            "id": "AstraDBToolComponent-zl7tZ",
             "name": "api_build_tool",
             "output_types": [
               "Tool"
             ]
           }
         },
-        "id": "xy-edge__AstraDBToolComponent-e1ASm{œdataTypeœ:œAstraDBToolComponentœ,œidœ:œAstraDBToolComponent-e1ASmœ,œnameœ:œapi_build_toolœ,œoutput_typesœ:[œToolœ]}-Agent-kUNrV{œfieldNameœ:œtoolsœ,œidœ:œAgent-kUNrVœ,œinputTypesœ:[œToolœ],œtypeœ:œotherœ}",
+        "id": "reactflow__edge-AstraDBToolComponent-zl7tZ{œdataTypeœ:œAstraDBToolComponentœ,œidœ:œAstraDBToolComponent-zl7tZœ,œnameœ:œapi_build_toolœ,œoutput_typesœ:[œToolœ]}-Agent-PPYh1{œfieldNameœ:œtoolsœ,œidœ:œAgent-PPYh1œ,œinputTypesœ:[œToolœ],œtypeœ:œotherœ}",
         "animated": false,
         "className": ""
       },
       {
-        "source": "AstraDBToolComponent-UCHRR",
-        "sourceHandle": "{œdataTypeœ:œAstraDBToolComponentœ,œidœ:œAstraDBToolComponent-UCHRRœ,œnameœ:œapi_build_toolœ,œoutput_typesœ:[œToolœ]}",
-        "target": "Agent-kUNrV",
-        "targetHandle": "{œfieldNameœ:œtoolsœ,œidœ:œAgent-kUNrVœ,œinputTypesœ:[œToolœ],œtypeœ:œotherœ}",
+        "source": "AstraDBToolComponent-sqw7f",
+        "sourceHandle": "{œdataTypeœ:œAstraDBToolComponentœ,œidœ:œAstraDBToolComponent-sqw7fœ,œnameœ:œapi_build_toolœ,œoutput_typesœ:[œToolœ]}",
+        "target": "Agent-PPYh1",
+        "targetHandle": "{œfieldNameœ:œtoolsœ,œidœ:œAgent-PPYh1œ,œinputTypesœ:[œToolœ],œtypeœ:œotherœ}",
         "data": {
           "targetHandle": {
             "fieldName": "tools",
-            "id": "Agent-kUNrV",
+            "id": "Agent-PPYh1",
             "inputTypes": [
               "Tool"
             ],
@@ -4428,26 +4436,26 @@
           },
           "sourceHandle": {
             "dataType": "AstraDBToolComponent",
-            "id": "AstraDBToolComponent-UCHRR",
+            "id": "AstraDBToolComponent-sqw7f",
             "name": "api_build_tool",
             "output_types": [
               "Tool"
             ]
           }
         },
-        "id": "xy-edge__AstraDBToolComponent-UCHRR{œdataTypeœ:œAstraDBToolComponentœ,œidœ:œAstraDBToolComponent-UCHRRœ,œnameœ:œapi_build_toolœ,œoutput_typesœ:[œToolœ]}-Agent-kUNrV{œfieldNameœ:œtoolsœ,œidœ:œAgent-kUNrVœ,œinputTypesœ:[œToolœ],œtypeœ:œotherœ}",
+        "id": "reactflow__edge-AstraDBToolComponent-sqw7f{œdataTypeœ:œAstraDBToolComponentœ,œidœ:œAstraDBToolComponent-sqw7fœ,œnameœ:œapi_build_toolœ,œoutput_typesœ:[œToolœ]}-Agent-PPYh1{œfieldNameœ:œtoolsœ,œidœ:œAgent-PPYh1œ,œinputTypesœ:[œToolœ],œtypeœ:œotherœ}",
         "animated": false,
         "className": ""
       },
       {
-        "source": "AstraDB-nPsZi",
-        "sourceHandle": "{œdataTypeœ:œAstraDBœ,œidœ:œAstraDB-nPsZiœ,œnameœ:œcomponent_as_toolœ,œoutput_typesœ:[œToolœ]}",
-        "target": "Agent-ONSLx",
-        "targetHandle": "{œfieldNameœ:œtoolsœ,œidœ:œAgent-ONSLxœ,œinputTypesœ:[œToolœ],œtypeœ:œotherœ}",
+        "source": "AstraDB-e84W9",
+        "sourceHandle": "{œdataTypeœ:œAstraDBœ,œidœ:œAstraDB-e84W9œ,œnameœ:œcomponent_as_toolœ,œoutput_typesœ:[œToolœ]}",
+        "target": "Agent-Gg5G7",
+        "targetHandle": "{œfieldNameœ:œtoolsœ,œidœ:œAgent-Gg5G7œ,œinputTypesœ:[œToolœ],œtypeœ:œotherœ}",
         "data": {
           "targetHandle": {
             "fieldName": "tools",
-            "id": "Agent-ONSLx",
+            "id": "Agent-Gg5G7",
             "inputTypes": [
               "Tool"
             ],
@@ -4455,26 +4463,26 @@
           },
           "sourceHandle": {
             "dataType": "AstraDB",
-            "id": "AstraDB-nPsZi",
+            "id": "AstraDB-e84W9",
             "name": "component_as_tool",
             "output_types": [
               "Tool"
             ]
           }
         },
-        "id": "xy-edge__AstraDB-nPsZi{œdataTypeœ:œAstraDBœ,œidœ:œAstraDB-nPsZiœ,œnameœ:œcomponent_as_toolœ,œoutput_typesœ:[œToolœ]}-Agent-ONSLx{œfieldNameœ:œtoolsœ,œidœ:œAgent-ONSLxœ,œinputTypesœ:[œToolœ],œtypeœ:œotherœ}",
+        "id": "reactflow__edge-AstraDB-e84W9{œdataTypeœ:œAstraDBœ,œidœ:œAstraDB-e84W9œ,œnameœ:œcomponent_as_toolœ,œoutput_typesœ:[œToolœ]}-Agent-Gg5G7{œfieldNameœ:œtoolsœ,œidœ:œAgent-Gg5G7œ,œinputTypesœ:[œToolœ],œtypeœ:œotherœ}",
         "className": "",
         "animated": false
       },
       {
-        "source": "SplitText-nM6Uj",
-        "sourceHandle": "{œdataTypeœ:œSplitTextœ,œidœ:œSplitText-nM6Ujœ,œnameœ:œchunksœ,œoutput_typesœ:[œDataœ]}",
-        "target": "AstraDB-dl361",
-        "targetHandle": "{œfieldNameœ:œingest_dataœ,œidœ:œAstraDB-dl361œ,œinputTypesœ:[œDataœ],œtypeœ:œotherœ}",
+        "source": "SplitText-FxUja",
+        "sourceHandle": "{œdataTypeœ:œSplitTextœ,œidœ:œSplitText-FxUjaœ,œnameœ:œchunksœ,œoutput_typesœ:[œDataœ]}",
+        "target": "AstraDB-0S7rw",
+        "targetHandle": "{œfieldNameœ:œingest_dataœ,œidœ:œAstraDB-0S7rwœ,œinputTypesœ:[œDataœ],œtypeœ:œotherœ}",
         "data": {
           "targetHandle": {
             "fieldName": "ingest_data",
-            "id": "AstraDB-dl361",
+            "id": "AstraDB-0S7rw",
             "inputTypes": [
               "Data"
             ],
@@ -4482,26 +4490,26 @@
           },
           "sourceHandle": {
             "dataType": "SplitText",
-            "id": "SplitText-nM6Uj",
+            "id": "SplitText-FxUja",
             "name": "chunks",
             "output_types": [
               "Data"
             ]
           }
         },
-        "id": "xy-edge__SplitText-nM6Uj{œdataTypeœ:œSplitTextœ,œidœ:œSplitText-nM6Ujœ,œnameœ:œchunksœ,œoutput_typesœ:[œDataœ]}-AstraDB-dl361{œfieldNameœ:œingest_dataœ,œidœ:œAstraDB-dl361œ,œinputTypesœ:[œDataœ],œtypeœ:œotherœ}",
+        "id": "reactflow__edge-SplitText-FxUja{œdataTypeœ:œSplitTextœ,œidœ:œSplitText-FxUjaœ,œnameœ:œchunksœ,œoutput_typesœ:[œDataœ]}-AstraDB-0S7rw{œfieldNameœ:œingest_dataœ,œidœ:œAstraDB-0S7rwœ,œinputTypesœ:[œDataœ],œtypeœ:œotherœ}",
         "animated": false,
         "className": ""
       },
       {
-        "source": "Agent-kUNrV",
-        "sourceHandle": "{œdataTypeœ:œAgentœ,œidœ:œAgent-kUNrVœ,œnameœ:œcomponent_as_toolœ,œoutput_typesœ:[œToolœ]}",
-        "target": "Agent-ONSLx",
-        "targetHandle": "{œfieldNameœ:œtoolsœ,œidœ:œAgent-ONSLxœ,œinputTypesœ:[œToolœ],œtypeœ:œotherœ}",
+        "source": "Agent-PPYh1",
+        "sourceHandle": "{œdataTypeœ:œAgentœ,œidœ:œAgent-PPYh1œ,œnameœ:œcomponent_as_toolœ,œoutput_typesœ:[œToolœ]}",
+        "target": "Agent-Gg5G7",
+        "targetHandle": "{œfieldNameœ:œtoolsœ,œidœ:œAgent-Gg5G7œ,œinputTypesœ:[œToolœ],œtypeœ:œotherœ}",
         "data": {
           "targetHandle": {
             "fieldName": "tools",
-            "id": "Agent-ONSLx",
+            "id": "Agent-Gg5G7",
             "inputTypes": [
               "Tool"
             ],
@@ -4509,22 +4517,22 @@
           },
           "sourceHandle": {
             "dataType": "Agent",
-            "id": "Agent-kUNrV",
+            "id": "Agent-PPYh1",
             "name": "component_as_tool",
             "output_types": [
               "Tool"
             ]
           }
         },
-        "id": "xy-edge__Agent-kUNrV{œdataTypeœ:œAgentœ,œidœ:œAgent-kUNrVœ,œnameœ:œcomponent_as_toolœ,œoutput_typesœ:[œToolœ]}-Agent-ONSLx{œfieldNameœ:œtoolsœ,œidœ:œAgent-ONSLxœ,œinputTypesœ:[œToolœ],œtypeœ:œotherœ}",
+        "id": "reactflow__edge-Agent-PPYh1{œdataTypeœ:œAgentœ,œidœ:œAgent-PPYh1œ,œnameœ:œcomponent_as_toolœ,œoutput_typesœ:[œToolœ]}-Agent-Gg5G7{œfieldNameœ:œtoolsœ,œidœ:œAgent-Gg5G7œ,œinputTypesœ:[œToolœ],œtypeœ:œotherœ}",
         "animated": false,
         "className": ""
       }
     ],
     "viewport": {
-      "x": 321.4820792850282,
-      "y": 247.50686592927462,
-      "zoom": 0.15245519615019837
+      "x": 137.31623287898412,
+      "y": 552.0079579329945,
+      "zoom": 0.3603611275561376
     }
   }
 }
