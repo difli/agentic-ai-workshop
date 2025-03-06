@@ -638,32 +638,19 @@ Create a user-friendly interface using Streamlit to connect your Langflow-powere
 
    <img src="assets/langflow-api-key.png" alt="Langflow api key" width="800">
 
-- Click **Generate Token**.  
+- Click **Create Secret Key**.  
 
-   <img src="assets/langflow-generate-token.png" alt="Generate Token Button on Langflow" width="800">
+   <img src="assets/langflow-create-secret.png" alt="Langflow create secret" width="800">
   
-- Click the **copy icon** on the right-hand side. Paste the token into your `secrets.toml`.  
+- Copy the key and paste the key into your `secrets.toml`.  
+- Click the **API** button and copy the full url from the curl command and paste it into your `secrets.toml` under `LANGFLOW_API_URL`.  
 
-   <img src="assets/langflow-copy-token.png" alt="Copy Token Button on Langflow" width="800">
-  
-- Copy your **Langflow ID** from the curl command and paste it into your `secrets.toml`.  
-
-   <img src="assets/langflow-token-and-id.png" alt="Langflow ID and Token" width="600">
-
-- Click **Flow Settings** to see the **Endpoint Name** you have configured for the flow at the start of the workshop.  
-
-   <img src="assets/langflow-flow-settings.png" alt="Langflow Flow Settings" width="800">
-
-- Copy the **Endpoint Name** and paste it into your `secrets.toml`.  
-
-   <img src="assets/langflow-flow-settings-1.png" alt="Langflow Flow Settings 1" width="500">
+   <img src="assets/langflow-api-url.png" alt="Langflow api url" width="800">
 
 - Your `secrets.toml` file should now contain your credentials:  
    ```plaintext
-   APP_TOKEN="AstraCS:LKeBuZvesCUlokSbiNfjCvAG:e291f0b1f37925cb31565d859bc56ec25cc1371..."
-   LANGFLOW_ID="cc011911-e624-4ec4-81d0-f1894f2..."
-   ENDPOINT="customer-support"   
-   ```
+  LANGFLOW_API_URL = "http://34.122.54.123:7860/api/v1/run/customer-support2?stream=false"  # Change this to your Langflow server IP
+  LANGFLOW_API_KEY = "sk-7GWKb5iLVxbQPmeZHuEh..."   ```
 ---
 
 #### **Run the Application** ▶️  
