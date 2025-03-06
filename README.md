@@ -241,20 +241,24 @@ The agent we developed so far cannot answer questions specific to our context an
 ---
 
 #### **Create a New Database in Astra DB** 📋  
-- In the `Astra DB` component, click **Add New Database** to create a new database.
+- In the [`Astra DB` ui](https://astra.datastax.com), click **Creae Database** to create a new database.
 
-   <img src="assets/langflow-create-database.png" alt="langflow-create-database" width="300">
+   <img src="assets/astra-create-db.png" alt="astra create db" width="800">
 
 - Fill in the required details and click **Create Database**.
+  - **Type** `Serverless (Vector)`  
+  - **Database Name:** `customer-support`  
+  - **Provider:** `Amazon Web Services`  
+  - **Region:** `us-wast-2`  
 
-   <img src="assets/langflow-create-database-1.png" alt="langflow-create-database-1" width="500">
+   <img src="assets/astra-create-db-2.png" alt="langflow-create-database-1" width="500">
 
 > **Note:** Database creation may take a few minutes.
 
 ---
 
-#### **Switch to Astra DB** 🔄  
-- Open Astra DB and navigate to your newly created database.
+#### **Navigate to your newly created database** 🔄  
+- Navigate to your newly created database.
 
 ---
 
