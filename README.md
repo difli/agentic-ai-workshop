@@ -222,24 +222,6 @@ The agent we developed so far cannot answer questions specific to our context an
 
 ---
 
-#### **Add an Astra DB Component** 🗄️  
-- Drag an `Astra DB` component onto the canvas from the **Vector Stores** section. 
-- Switch the `Astra DB` component into `Tool Mode`
-
-   <img src="assets/langflow-astra-vector-tool-mode.png" alt="langflow-astra-vector-tool-mode" width="300">
-  
-- Use this tool to retrieve vectorized FAQ data.
-- This tool enables the agent to search the FAQ database for relevant information.
-
----
-
-#### **Connect the Components** 🔗  
-- Link the `Astra DB` tool to the `Agent` component.  
-
-   <img src="assets/langflow-rag-flow.png" alt="langflow-rag-flow" width="1200">
-
----
-
 #### **Create a New Database in Astra DB** 📋  
 - In the [`Astra DB` ui](https://astra.datastax.com), click **Creae Database** to create a new database.
 
@@ -270,6 +252,24 @@ The agent we developed so far cannot answer questions specific to our context an
 - Name the collection `faq`, enable the **Vector-Enabled Collection** option, and click **Create Collection**.
 
    <img src="assets/astradb-create-collection-vectorized-1.png" alt="astradb-create-collection-vectorized-1" width="500">
+
+---
+
+#### **Add an Astra DB Component** 🗄️  
+- Drag an `Astra DB` component onto the canvas from the **Vector Stores** section. 
+- Switch the `Astra DB` component into `Tool Mode`
+
+   <img src="assets/langflow-astra-vector-tool-mode.png" alt="langflow-astra-vector-tool-mode" width="300">
+  
+- Use this tool to retrieve vectorized FAQ data.
+- This tool enables the agent to search the FAQ database for relevant information.
+
+---
+
+#### **Connect the Components** 🔗  
+- Link the `Astra DB` tool to the `Agent` component.  
+
+   <img src="assets/langflow-rag-flow.png" alt="langflow-rag-flow" width="1200">
 
 ---
 
