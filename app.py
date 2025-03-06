@@ -2,14 +2,15 @@ import requests
 import streamlit as st
 from datetime import datetime
 
-BASE_API_URL = "https://api.langflow.astra.datastax.com"
-LANGFLOW_ID = st.secrets['LANGFLOW_ID']
-ENDPOINT = st.secrets['ENDPOINT']
-APPLICATION_TOKEN = st.secrets['APP_TOKEN']
-
+# Retrieve the HTTP endpoint and token from secrets
+LANGFLOW_API_URL = st.secrets['LANGFLOW_API_URL']  # Example: "http://127.0.0.1:7860/api/v1/run/customer_support2?stream=false"
+APPLICATION_TOKEN = st.secrets['LANGFLOW_API_KEY']
 
 def run_flow(message: str) -> dict:
-    api_url = f"{BASE_API_URL}/lf/{LANGFLOW_ID}/api/v1/run/{ENDPOINT}"
+    """
+    Sends a request to the Langflow API using x-api-key authentication.
+    """
+    api_url = LANGFLOW_API_URL  # Ensure the full API URL is in secrets (including query params if needed)
 
     payload = {
         "input_value": message,
@@ -17,13 +18,20 @@ def run_flow(message: str) -> dict:
         "input_type": "chat",
     }
 
-    headers = {"Authorization": "Bearer " + APPLICATION_TOKEN, "Content-Type": "application/json"}
-    response = requests.post(api_url, json=payload, headers=headers)
-    return response.json()
+    headers = {
+        "x-api-key": APPLICATION_TOKEN,  # Using x-api-key for authentication
+        "Content-Type": "application/json"
+    }
 
+    response = requests.post(api_url, json=payload, headers=headers)
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return {"error": f"Request failed with status {response.status_code}: {response.text}"}
 
 def main():
-    # Apply custom styles
+    # Apply custom styles for chat bubbles
     st.markdown(
         """
         <style>
@@ -61,7 +69,7 @@ def main():
     st.title("📞 Customer Support Assistant")
     st.subheader("Get instant answers to your questions!")
 
-    # Initialize session state for messages
+    # Initialize session state for messages and current input
     if "messages" not in st.session_state:
         st.session_state["messages"] = []
     if "current_input" not in st.session_state:
@@ -75,7 +83,6 @@ def main():
     # Sample questions
     st.markdown("### Try asking:")
     col1, col2, col3 = st.columns(3)
-
     if col1.button("How can I track my order?"):
         st.session_state["current_input"] = "How can I track my order?"
     if col2.button("What is your return policy?"):
@@ -99,33 +106,26 @@ def main():
             try:
                 response = run_flow(user_input)
 
-                # Extract and store bot response
-                bot_response = response["outputs"][0]["outputs"][0]["results"]["message"]["text"]
-                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-                # Add the latest interaction to the chat history
-                st.session_state["messages"].insert(0, {"user": user_input, "bot": bot_response, "timestamp": timestamp})
-                # Clear the current input
-                st.session_state["current_input"] = ""
-
+                if "error" in response:
+                    st.error(response["error"])
+                else:
+                    bot_response = response["outputs"][0]["outputs"][0]["results"]["message"]["text"]
+                    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    # Store the interaction in the session state
+                    st.session_state["messages"].insert(0, {
+                        "user": user_input,
+                        "bot": bot_response,
+                        "timestamp": timestamp
+                    })
+                    st.session_state["current_input"] = ""
             except Exception as e:
-                st.error("Oops! Something went wrong. Please try again.")
+                st.error(f"Oops! Something went wrong. {str(e)}")
 
     # Display chat history (latest at the top)
     for message in st.session_state["messages"]:
-        # Timestamp
         st.markdown(f'<div class="timestamp">{message["timestamp"]}</div>', unsafe_allow_html=True)
-        # User's message
-        st.markdown(
-            f'<div class="chat-bubble-user">{message["user"]}</div>',
-            unsafe_allow_html=True,
-        )
-        # Bot's response
-        st.markdown(
-            f'<div class="chat-bubble">{message["bot"]}</div>',
-            unsafe_allow_html=True,
-        )
-
+        st.markdown(f'<div class="chat-bubble-user">{message["user"]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="chat-bubble">{message["bot"]}</div>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
