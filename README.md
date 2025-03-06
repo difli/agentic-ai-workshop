@@ -68,7 +68,7 @@ Let’s dive in!
 This workshop assumes you have access to:
 1. A **[GitHub account](https://github.com)**.
 2. A paid **OpenAI account**. *(We will provide API keys if needed.)*
-3. **Langflow**: Attendees will be provided access to a self-managed Langflow instance at [http://34.173.224.173:7860](http://34.173.224.173:7860/).
+3. **Langflow**: Attendees will be provided access to a self-managed Langflow instance at [http://34.122.54.123:7860](http://34.122.54.123:7860).
 
 Additionally, create free accounts for:
 - **Streamlit**: Follow the [quickstart guide](https://docs.streamlit.io/streamlit-community-cloud/get-started/quickstart).
@@ -89,7 +89,7 @@ Start by setting up a new flow in Langflow, the foundation for your project.
 ---
 
 #### **Create a New Flow** ➕  
-- Open **the Langflow instance at** [http://34.173.227.159:7860](http://34.173.227.159:7860).
+- Open **the Langflow instance at** [http://34.122.54.123:7860](http://34.122.54.123:7860).
 - Sign up and login into Langflow.
 - Click **New Flow** on the dashboard.  
 - This will open the flow creation interface.  
