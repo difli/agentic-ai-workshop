@@ -261,7 +261,6 @@ The agent we developed so far cannot answer questions specific to our context an
 ---
 
 #### **Add an Astra DB Component** 🗄️  
-- Go back to Langflow
 - Drag an `Astra DB` component onto the canvas from the **Vector Stores** section. 
 - Switch the `Astra DB` component into `Tool Mode`
 
