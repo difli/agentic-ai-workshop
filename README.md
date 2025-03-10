@@ -223,7 +223,7 @@ The agent we developed so far cannot answer questions specific to our context an
 ---
 
 #### **Create a New Database in Astra DB** 📋  
-- In the [`Astra DB` ui](https://astra.datastax.com), click **Create Database** to create a new database.
+- In the [`Astra DB`] ui, (https://astra.datastax.com), click **Create Database** to create a new database.
 
    <img src="assets/astra-create-db.png" alt="astra create db" width="800">
 
@@ -634,7 +634,7 @@ Create a user-friendly interface using Streamlit to connect your Langflow-powere
 
 - Log in to Langflow, click **the avatar** in the right hand upper corner.
 
-   <img src="assets/langflow-settings.png" alt="Langflow Settings" width="800">
+   <img src="assets/langflow-settings.png" alt="Langflow Settings" width="500">
 
 - Click **Settings**
 - Click **Langflow API Keys**
@@ -644,7 +644,7 @@ Create a user-friendly interface using Streamlit to connect your Langflow-powere
 
 - Click **Create Secret Key**.  
 
-   <img src="assets/langflow-create-secret.png" alt="Langflow create secret" width="800">
+   <img src="assets/langflow-create-secret.png" alt="Langflow create secret" width="300">
   
 - Copy the key and paste the key into your `secrets.toml`.  
 - Click the **API** button and copy the full url from the curl command and paste it into your `secrets.toml` under `LANGFLOW_API_URL`.  
@@ -715,7 +715,7 @@ git push origin main
 - On the Streamlit Cloud dashboard, click **Create App**.  
   <img src="assets/streamlit-create-app.png" alt="Streamlit Create App Button" width="800">
 
-- Fill in the details, specifying your forked GitHub repository. Choose the branch (e.g., `main`) and `app.py` as the entry point.  
+- Fill in the details, specifying your forked GitHub repository. Choose the branch `self-managed and `app.py` as the entry point.  
   <img src="assets/streamlit-settings.png" alt="Streamlit App Settings" width="500">
 
 ---
@@ -785,14 +785,18 @@ The `app.py` file serves as the backbone of your application, connecting the **S
 ### **API Integration**
 
 The `run_flow()` function is responsible for communicating with the Langflow backend:
-- **Base API URL**: Retrieved from the `secrets.toml` file (`LANGFLOW_ID`, `ENDPOINT`, and `APP_TOKEN`).
+- **API URL**: Retrieved from the `secrets.toml` file (`LANGFLOW_API_URL`).
+- **Authentication**: Uses `x-api-key` for secure requests.
 - **Payload**: Sends user input to the backend in JSON format.
 - **Response Handling**: Extracts the AI-generated response for display in the UI.
 
 Code Snippet:
 ```python
 def run_flow(message: str) -> dict:
-    api_url = f"{BASE_API_URL}/lf/{LANGFLOW_ID}/api/v1/run/{ENDPOINT}"
+    """
+    Sends a request to the Langflow API using x-api-key authentication.
+    """
+    api_url = LANGFLOW_API_URL  # Ensure the full API URL is in secrets (including query params if needed)
 
     payload = {
         "input_value": message,
@@ -800,9 +804,17 @@ def run_flow(message: str) -> dict:
         "input_type": "chat",
     }
 
-    headers = {"Authorization": "Bearer " + APPLICATION_TOKEN, "Content-Type": "application/json"}
+    headers = {
+        "x-api-key": LANGFLOW_API_KEY,  # Using x-api-key for authentication
+        "Content-Type": "application/json"
+    }
+
     response = requests.post(api_url, json=payload, headers=headers)
-    return response.json()
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return {"error": f"Request failed with status {response.status_code}: {response.text}"}
 ```
 
 ---
@@ -816,8 +828,9 @@ The Streamlit front end provides an intuitive interface for user interactions:
 
 Code Snippet (Input and Response Handling):
 ```python
-# Display chat history
+# Display chat history (latest at the top)
 for message in st.session_state["messages"]:
+    st.markdown(f'<div class="timestamp">{message["timestamp"]}</div>', unsafe_allow_html=True)
     # User's message
     st.markdown(f'<div class="chat-bubble-user">{message["user"]}</div>', unsafe_allow_html=True)
     # Bot's response
@@ -835,6 +848,26 @@ Custom CSS styles ensure the app is visually appealing and user-friendly. Exampl
     color: white;
     padding: 10px;
     border-radius: 15px;
+    max-width: 80%;
+    margin-bottom: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+.chat-bubble-user {
+    background-color: #f1f1f1;
+    color: black;
+    padding: 10px;
+    border-radius: 15px;
+    max-width: 80%;
+    margin-bottom: 10px;
+    align-self: flex-end;
+    font-size: 16px;
+    line-height: 1.5;
+}
+.timestamp {
+    font-size: 12px;
+    color: gray;
+    margin-bottom: 5px;
 }
 ```
 
@@ -843,9 +876,8 @@ Custom CSS styles ensure the app is visually appealing and user-friendly. Exampl
 ### **Secrets Management**
 
 The `secrets.toml` file stores sensitive credentials:
-- **Langflow ID**: Identifies the specific flow to connect.
-- **Application Token**: Authenticates API requests.
-- **Endpoint**: Specifies the Langflow backend entry point.
+- **Langflow API URL**: The endpoint for sending queries to the backend.
+- **Langflow API Key**: Used for authentication in API requests.
 
 ---
 
@@ -854,8 +886,8 @@ The `secrets.toml` file stores sensitive credentials:
 The app performs these key steps:
 1. Users submit a query via the Streamlit interface.
 2. The query is sent to Langflow through the `run_flow()` function.
-3. Langflow processes the query using your custom flow and returns a response.
-4. The response is displayed in the Streamlit UI, styled as chat bubbles.
+3. Langflow processes the query using the custom flow and returns a response.
+4. The response is displayed in the Streamlit UI, styled as chat bubbles with timestamps.
 
 ---
 
@@ -863,4 +895,4 @@ By understanding `app.py`, you can:
 - Customize its functionality for your specific use case.
 - Add more features, like new buttons or additional styling.
 
-> **Next Steps:** Experiment with `app.py` to expand your app's capabilities!
+> **Next Steps:** Experiment with `app.py` to expand your app's capabilities! 🚀
